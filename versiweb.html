@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CreatorsHub | Digital Asset Marketplace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #f5f5f7;
+            color: #1d1d1f;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+        }
+        
+        .creator-gradient {
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .countdown-timer {
+            font-feature-settings: "tnum";
+            font-variant-numeric: tabular-nums;
+        }
+        
+        .tab-active {
+            position: relative;
+            color: #0071e3;
+        }
+        
+        .tab-active:after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background-color: #0071e3;
+            border-radius: 3px;
+        }
+        
+        .file-upload {
+            border: 2px dashed #d1d5db;
+            transition: all 0.3s ease;
+        }
+        
+        .file-upload:hover {
+            border-color: #a777e3;
+            background-color: #f9fafb;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background-color: #e5e7eb;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6e8efb, #a777e3);
+            transition: width 0.3s ease;
+        }
+        
+        .floating-action-btn {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Desktop specific styles */
+        .desktop-sidebar {
+            width: 240px;
+            transition: all 0.3s ease;
+        }
+        
+        .desktop-main {
+            margin-left: 240px;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-collapsed .desktop-sidebar {
+            width: 80px;
+        }
+        
+        .sidebar-collapsed .desktop-main {
+            margin-left: 80px;
+        }
+        
+        .sidebar-item:hover {
+            background-color: rgba(0, 113, 227, 0.1);
+        }
+        
+        .sidebar-item.active {
+            background-color: rgba(0, 113, 227, 0.1);
+            color: #0071e3;
+        }
+        
+        .product-grid {
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        }
+        
+        .creator-grid {
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        }
+        
+        .category-grid {
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+        
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-fadeIn {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        
+        /* Pulse animation for notifications */
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .pulse {
+            animation: pulse 1.5s infinite;
+        }
+        
+        /* Custom checkbox */
+        .custom-checkbox {
+            position: relative;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #d1d5db;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        
+        .custom-checkbox.checked {
+            background-color: #3b82f6;
+            border-color: #3b82f6;
+        }
+        
+        .custom-checkbox.checked:after {
+            content: '';
+            position: absolute;
+            left: 6px;
+            top: 2px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+        
+        /* Rating stars */
+        .rating-stars {
+            display: inline-flex;
+            position: relative;
+        }
+        
+        .rating-stars .stars-empty {
+            color: #d1d5db;
+        }
+        
+        .rating-stars .stars-filled {
+            color: #f59e0b;
+            position: absolute;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+        }
+        
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+        }
+        
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 120px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        /* Custom radio buttons */
+        .custom-radio {
+            position: relative;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #d1d5db;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+        
+        .custom-radio.checked {
+            border-color: #3b82f6;
+        }
+        
+        .custom-radio.checked:after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 10px;
+            height: 10px;
+            background-color: #3b82f6;
+            border-radius: 50%;
+        }
+
+        /* Page transitions */
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+        }
+
+        /* Notification dropdown */
+        .dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background-color: white;
+            min-width: 280px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            z-index: 1;
+            margin-top: 10px;
+        }
+        
+        .dropdown.active {
+            display: block;
+        }
+
+        /* Cart items */
+        .cart-item:hover {
+            background-color: #f9fafb;
+        }
+
+        /* Preview modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 50;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Creator profile */
+        .creator-badge {
+            position: absolute;
+            bottom: -10px;
+            right: -10px;
+            background-color: #6e8efb;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        /* File preview */
+        .file-preview {
+            transition: all 0.3s ease;
+        }
+        
+        .file-preview:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Desktop Layout -->
+    <div class="flex min-h-screen">
+        <!-- Desktop Sidebar -->
+        <div class="desktop-sidebar bg-white border-r border-gray-200 fixed h-full z-20">
+            <div class="p-4 flex items-center justify-between border-b border-gray-200 h-16">
+                <div class="flex items-center space-x-2">
+                    <div class="gradient-bg w-8 h-8 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-palette text-white text-sm"></i>
+                    </div>
+                    <h1 class="font-semibold text-lg">CreatorsHub</h1>
+                </div>
+                <button id="sidebar-toggle" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            
+            <div class="p-4">
+                <div class="relative mb-4">
+                    <input type="text" placeholder="Search..." class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                    <i class="fas fa-search absolute left-3 top-2.5 text-gray-400"></i>
+                </div>
+                
+                <nav class="space-y-1">
+                    <a href="#" class="sidebar-item active flex items-center space-x-3 p-2 rounded-lg" data-page="home-page">
+                        <i class="fas fa-home w-6 text-center"></i>
+                        <span>Home</span>
+                    </a>
+                    <a href="#" class="sidebar-item flex items-center space-x-3 p-2 rounded-lg" data-page="browse-page">
+                        <i class="fas fa-compass w-6 text-center"></i>
+                        <span>Browse</span>
+                    </a>
+                    <a href="#" class="sidebar-item flex items-center space-x-3 p-2 rounded-lg" data-page="cart-page">
+                        <div class="relative w-6 text-center">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
+                        </div>
+                        <span>Cart</span>
+                    </a>
+                    <a href="#" class="sidebar-item flex items-center space-x-3 p-2 rounded-lg" data-page="wishlist-page">
+                        <i class="fas fa-heart w-6 text-center"></i>
+                        <span>Wishlist</span>
+                    </a>
+                    <a href="#" class="sidebar-item flex items-center space-x-3 p-2 rounded-lg" data-page="downloads-page">
+                        <i class="fas fa-download w-6 text-center"></i>
+                        <span>Downloads</span>
+                    </a>
+                </nav>
+                
+                <div class="border-t border-gray-200 mt-4 pt-4">
+                    <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 px-2">Categories</h3>
+                    <nav class="space-y-1">
+                        <a href="#" class="sidebar-item flex items-center space-x-3 p-2 rounded-lg" data-category="graphics">
+                            <i class="fas fa-image w-6 text-center text-blue-500"></i>
+                            <span>Graphics</span>
+                        </a>
+                        <a href="#" class="sidebar-item flex items-center space-x-3 p-2 rounded-lg" data-category="music">
+                            <i class="fas fa-music w-6 text-center text-purple-500"></i>
+                            <span>Music</span>
+                        </a>
+                        <a href="#" class="sidebar-item flex items-center space-x-3 p-2 rounded-lg" data-category="videos">
+                            <i class="fas fa-video w-6 text-center text-green-500"></i>
+                            <span>Videos</span>
+                        </a>
+                        <a href="#" class="sidebar-item flex items-center space-x-3 p-2 rounded-lg" data-category="templates">
+                            <i class="fas fa-file-code w-6 text-center text-yellow-500"></i>
+                            <span>Templates</span>
+                        </a>
+                    </nav>
+                </div>
+                
+                <div class="border-t border-gray-200 mt-4 pt-4">
+                    <div class="flex items-center space-x-3 p-2 rounded-lg">
+                        <div class="w-8 h-8 rounded-full gradient-bg flex items-center justify-center">
+                            <i class="fas fa-user text-white text-sm"></i>
+                        </div>
+                        <div>
+                            <div class="font-medium">John Doe</div>
+                            <div class="text-xs text-gray-500">Creator</div>
+                        </div>
+                    </div>
+                    <a href="#" class="sidebar-item flex items-center space-x-3 p-2 rounded-lg mt-2" data-page="profile-page">
+                        <i class="fas fa-user-cog w-6 text-center"></i>
+                        <span>Profile</span>
+                    </a>
+                    <a href="#" class="sidebar-item flex items-center space-x-3 p-2 rounded-lg" data-page="upload-page">
+                        <i class="fas fa-upload w-6 text-center"></i>
+                        <span>Upload</span>
+                    </a>
+                    <a href="#" class="sidebar-item flex items-center space-x-3 p-2 rounded-lg" data-page="settings-page">
+                        <i class="fas fa-cog w-6 text-center"></i>
+                        <span>Settings</span>
+                    </a>
+                    <button class="sidebar-item w-full flex items-center space-x-3 p-2 rounded-lg text-left text-red-500 mt-2">
+                        <i class="fas fa-sign-out-alt w-6 text-center"></i>
+                        <span>Sign Out</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="desktop-main flex-1">
+            <!-- Desktop Header -->
+            <header class="bg-white border-b border-gray-200 sticky top-0 z-10">
+                <div class="px-6 py-4 flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <h2 class="text-xl font-semibold" id="page-title">Home</h2>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="relative">
+                            <button id="notifications-btn" class="relative text-gray-500 hover:text-gray-700">
+                                <i class="fas fa-bell text-xl"></i>
+                                <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center pulse">2</span>
+                            </button>
+                            <div id="notifications-dropdown" class="dropdown">
+                                <div class="p-4 border-b border-gray-200">
+                                    <h3 class="font-medium">Notifications</h3>
+                                </div>
+                                <div class="max-h-80 overflow-y-auto">
+                                    <div class="p-4 border-b border-gray-200 hover:bg-gray-50 cursor-pointer">
+                                        <div class="flex items-start space-x-3">
+                                            <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                                                <i class="fas fa-bell text-blue-500"></i>
+                                            </div>
+                                            <div>
+                                                <p class="text-sm"><span class="font-medium">New message</span> from Sarah Johnson</p>
+                                                <p class="text-xs text-gray-500 mt-1">2 minutes ago</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-4 border-b border-gray-200 hover:bg-gray-50 cursor-pointer">
+                                        <div class="flex items-start space-x-3">
+                                            <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+                                                <i class="fas fa-check-circle text-green-500"></i>
+                                            </div>
+                                            <div>
+                                                <p class="text-sm">Your asset <span class="font-medium">"Minimal UI Kit"</span> was approved</p>
+                                                <p class="text-xs text-gray-500 mt-1">1 hour ago</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-4 hover:bg-gray-50 cursor-pointer">
+                                        <div class="flex items-start space-x-3">
+                                            <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
+                                                <i class="fas fa-shopping-cart text-purple-500"></i>
+                                            </div>
+                                            <div>
+                                                <p class="text-sm">New sale! <span class="font-medium">$24.99</span> earned from your template</p>
+                                                <p class="text-xs text-gray-500 mt-1">5 hours ago</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-3 border-t border-gray-200 text-center">
+                                    <a href="#" class="text-blue-500 text-sm font-medium">View all notifications</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="relative">
+                            <button id="messages-btn" class="relative text-gray-500 hover:text-gray-700">
+                                <i class="fas fa-envelope text-xl"></i>
+                                <span class="absolute -top-1 -right-1 bg-blue-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">1</span>
+                            </button>
+                            <div id="messages-dropdown" class="dropdown">
+                                <div class="p-4 border-b border-gray-200">
+                                    <h3 class="font-medium">Messages</h3>
+                                </div>
+                                <div class="max-h-80 overflow-y-auto">
+                                    <div class="p-4 border-b border-gray-200 hover:bg-gray-50 cursor-pointer">
+                                        <div class="flex items-start space-x-3">
+                                            <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center">
+                                                <i class="fas fa-user text-pink-500"></i>
+                                            </div>
+                                            <div>
+                                                <p class="text-sm"><span class="font-medium">Sarah Johnson</span>: Hi, I have a question about your template...</p>
+                                                <p class="text-xs text-gray-500 mt-1">30 minutes ago</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-4 border-b border-gray-200 hover:bg-gray-50 cursor-pointer">
+                                        <div class="flex items-start space-x-3">
+                                            <div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center">
+                                                <i class="fas fa-user text-yellow-500"></i>
+                                            </div>
+                                            <div>
+                                                <p class="text-sm"><span class="font-medium">Michael Chen</span>: Thanks for the quick response!</p>
+                                                <p class="text-xs text-gray-500 mt-1">2 days ago</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-4 hover:bg-gray-50 cursor-pointer">
+                                        <div class="flex items-start space-x-3">
+                                            <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+                                                <i class="fas fa-user text-green-500"></i>
+                                            </div>
+                                            <div>
+                                                <p class="text-sm"><span class="font-medium">CreatorsHub Support</span>: Your recent ticket has been resolved</p>
+                                                <p class="text-xs text-gray-500 mt-1">1 week ago</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-3 border-t border-gray-200 text-center">
+                                    <a href="#" class="text-blue-500 text-sm font-medium">View all messages</a>
+                                </div>
+                            </div>
+                        </div>
+                        <button id="upload-btn" class="gradient-bg text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 hover:opacity-90 transition">
+                            <i class="fas fa-plus"></i>
+                            <span>Upload</span>
+                        </button>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Main Content Area -->
+            <main class="p-6">
+                <!-- Home Page -->
+                <div id="home-page" class="page active animate-fadeIn">
+                    <!-- Hero Section -->
+                    <section class="gradient-bg rounded-2xl p-8 text-white mb-8">
+                        <div class="max-w-2xl">
+                            <h2 class="text-3xl font-bold mb-3">Sell & Discover Digital Assets</h2>
+                            <p class="text-white text-opacity-90 mb-6 text-lg">Join our community of 50,000+ creators and find the perfect assets for your projects</p>
+                            <div class="flex space-x-4">
+                                <button class="bg-white text-purple-600 font-medium px-6 py-3 rounded-full hover:bg-gray-100 transition">
+                                    Start Selling
+                                </button>
+                                <button class="border border-white border-opacity-30 text-white font-medium px-6 py-3 rounded-full hover:bg-white hover:bg-opacity-10 transition">
+                                    Explore Assets
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <!-- Categories -->
+                    <section class="mb-8">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="font-semibold text-xl">Browse Categories</h3>
+                            <button class="text-blue-500 font-medium hover:text-blue-600">See all</button>
+                        </div>
+                        <div class="grid category-grid gap-4">
+                            <div class="bg-white rounded-xl p-4 flex flex-col items-center card-hover shadow-sm hover:shadow-md">
+                                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-3">
+                                    <i class="fas fa-image text-blue-500 text-xl"></i>
+                                </div>
+                                <span class="font-medium">Graphics</span>
+                                <span class="text-xs text-gray-500 mt-1">1,240 items</span>
+                            </div>
+                            <div class="bg-white rounded-xl p-4 flex flex-col items-center card-hover shadow-sm hover:shadow-md">
+                                <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-3">
+                                    <i class="fas fa-music text-purple-500 text-xl"></i>
+                                </div>
+                                <span class="font-medium">Music</span>
+                                <span class="text-xs text-gray-500 mt-1">850 items</span>
+                            </div>
+                            <div class="bg-white rounded-xl p-4 flex flex-col items-center card-hover shadow-sm hover:shadow-md">
+                                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-3">
+                                    <i class="fas fa-video text-green-500 text-xl"></i>
+                                </div>
+                                <span class="font-medium">Videos</span>
+                                <span class="text-xs text-gray-500 mt-1">620 items</span>
+                            </div>
+                            <div class="bg-white rounded-xl p-4 flex flex-col items-center card-hover shadow-sm hover:shadow-md">
+                                <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center mb-3">
+                                    <i class="fas fa-file-code text-yellow-500 text-xl"></i>
+                                </div>
+                                <span class="font-medium">Templates</span>
+                                <span class="text-xs text-gray-500 mt-1">1,850 items</span>
+                            </div>
+                            <div class="bg-white rounded-xl p-4 flex flex-col items-center card-hover shadow-sm hover:shadow-md">
+                                <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-3">
+                                    <i class="fas fa-font text-red-500 text-xl"></i>
+                                </div>
+                                <span class="font-medium">Fonts</span>
+                                <span class="text-xs text-gray-500 mt-1">320 items</span>
+                            </div>
+                            <div class="bg-white rounded-xl p-4 flex flex-col items-center card-hover shadow-sm hover:shadow-md">
+                                <div class="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center mb-3">
+                                    <i class="fas fa-cube text-pink-500 text-xl"></i>
+                                </div>
+                                <span class="font-medium">3D Models</span>
+                                <span class="text-xs text-gray-500 mt-1">450 items</span>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <!-- New Arrivals with Countdown -->
+                    <section class="mb-8">
+                        <div class="flex items-center justify-between mb-6">
+                            <div>
+                                <h3 class="font-semibold text-xl">New Arrivals</h3>
+                                <p class="text-sm text-gray-500">Fresh assets added this week</p>
+                            </div>
+                            <div class="bg-gray-100 px-4 py-2 rounded-full flex items-center countdown-timer">
+                                <i class="fas fa-clock text-gray-500 mr-2"></i>
+                                <span class="font-medium">23:59:59</span>
+                            </div>
+                        </div>
+                        <div class="grid product-grid gap-6">
+                            <div class="bg-white rounded-xl overflow-hidden card-hover shadow-sm hover:shadow-md">
+                                <div class="h-48 bg-gradient-to-r from-blue-100 to-purple-100 flex items-center justify-center relative">
+                                    <i class="fas fa-image text-5xl text-blue-500 opacity-70"></i>
+                                    <div class="absolute bottom-3 left-3 bg-white bg-opacity-90 px-3 py-1 rounded-full flex items-center">
+                                        <div class="w-5 h-5 rounded-full creator-gradient mr-2"></div>
+                                        <span class="text-sm font-medium">@designpro</span>
+                                    </div>
+                                    <div class="absolute top-3 right-3 bg-white bg-opacity-90 px-2 py-1 rounded-full">
+                                        <i class="fas fa-heart text-red-500"></i>
+                                    </div>
+                                </div>
+                                <div class="p-4">
+                                    <h4 class="font-medium mb-2">Minimal UI Kit</h4>
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <span class="text-red-500 font-semibold">$14.99</span>
+                                            <span class="text-gray-400 text-sm line-through ml-1">$29.99</span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <div class="rating-stars">
+                                                <div class="stars-empty">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                                <div class="stars-filled" style="width: 96%">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                            </div>
+                                            <span class="text-gray-500 text-sm ml-1">4.8</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-xl overflow-hidden card-hover shadow-sm hover:shadow-md">
+                                <div class="h-48 bg-gradient-to-r from-green-100 to-teal-100 flex items-center justify-center relative">
+                                    <i class="fas fa-headphones text-5xl text-green-500 opacity-70"></i>
+                                    <div class="absolute bottom-3 left-3 bg-white bg-opacity-90 px-3 py-1 rounded-full flex items-center">
+                                        <div class="w-5 h-5 rounded-full bg-pink-200 mr-2"></div>
+                                        <span class="text-sm font-medium">@soundwaves</span>
+                                    </div>
+                                    <div class="absolute top-3 right-3 bg-white bg-opacity-90 px-2 py-1 rounded-full">
+                                        <i class="far fa-heart text-gray-500"></i>
+                                    </div>
+                                </div>
+                                <div class="p-4">
+                                    <h4 class="font-medium mb-2">Ambient Sounds Pack</h4>
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <span class="text-red-500 font-semibold">$9.99</span>
+                                            <span class="text-gray-400 text-sm line-through ml-1">$19.99</span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <div class="rating-stars">
+                                                <div class="stars-empty">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                                <div class="stars-filled" style="width: 90%">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                            </div>
+                                            <span class="text-gray-500 text-sm ml-1">4.5</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-xl overflow-hidden card-hover shadow-sm hover:shadow-md">
+                                <div class="h-48 bg-gradient-to-r from-purple-100 to-pink-100 flex items-center justify-center relative">
+                                    <i class="fas fa-photo-film text-5xl text-purple-500 opacity-70"></i>
+                                    <div class="absolute bottom-3 left-3 bg-white bg-opacity-90 px-3 py-1 rounded-full flex items-center">
+                                        <div class="w-5 h-5 rounded-full bg-blue-200 mr-2"></div>
+                                        <span class="text-sm font-medium">@visuals</span>
+                                    </div>
+                                    <div class="absolute top-3 right-3 bg-white bg-opacity-90 px-2 py-1 rounded-full">
+                                        <i class="far fa-heart text-gray-500"></i>
+                                    </div>
+                                </div>
+                                <div class="p-4">
+                                    <h4 class="font-medium mb-2">Social Media Templates</h4>
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <span class="text-red-500 font-semibold">$12.99</span>
+                                            <span class="text-gray-400 text-sm line-through ml-1">$24.99</span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <div class="rating-stars">
+                                                <div class="stars-empty">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                                <div class="stars-filled" style="width: 94%">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                            </div>
+                                            <span class="text-gray-500 text-sm ml-1">4.7</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-xl overflow-hidden card-hover shadow-sm hover:shadow-md">
+                                <div class="h-48 bg-gradient-to-r from-yellow-100 to-orange-100 flex items-center justify-center relative">
+                                    <i class="fas fa-font text-5xl text-yellow-500 opacity-70"></i>
+                                    <div class="absolute bottom-3 left-3 bg-white bg-opacity-90 px-3 py-1 rounded-full flex items-center">
+                                        <div class="w-5 h-5 rounded-full bg-green-200 mr-2"></div>
+                                        <span class="text-sm font-medium">@typegenius</span>
+                                    </div>
+                                    <div class="absolute top-3 right-3 bg-white bg-opacity-90 px-2 py-1 rounded-full">
+                                        <i class="far fa-heart text-gray-500"></i>
+                                    </div>
+                                </div>
+                                <div class="p-4">
+                                    <h4 class="font-medium mb-2">Modern Sans Serif Font</h4>
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <span class="text-red-500 font-semibold">$19.99</span>
+                                            <span class="text-gray-400 text-sm line-through ml-1">$39.99</span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <div class="rating-stars">
+                                                <div class="stars-empty">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                                <div class="stars-filled" style="width: 98%">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                            </div>
+                                            <span class="text-gray-500 text-sm ml-1">4.9</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <!-- Top Creators -->
+                    <section class="mb-8">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="font-semibold text-xl">Top Creators</h3>
+                            <button class="text-blue-500 font-medium hover:text-blue-600">View all</button>
+                        </div>
+                        <div class="grid creator-grid gap-4">
+                            <div class="bg-white rounded-xl p-4 flex flex-col items-center card-hover shadow-sm hover:shadow-md">
+                                <div class="relative mb-3">
+                                    <div class="w-16 h-16 rounded-full creator-gradient flex items-center justify-center">
+                                        <i class="fas fa-user text-white text-xl"></i>
+                                    </div>
+                                    <div class="creator-badge">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                </div>
+                                <span class="font-medium">@designpro</span>
+                                <span class="text-xs text-gray-500 mt-1">Graphics</span>
+                                <div class="flex items-center mt-2">
+                                    <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                    <span class="text-xs font-medium ml-1">4.8</span>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-xl p-4 flex flex-col items-center card-hover shadow-sm hover:shadow-md">
+                                <div class="relative mb-3">
+                                    <div class="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center">
+                                        <i class="fas fa-user text-blue-500 text-xl"></i>
+                                    </div>
+                                    <div class="creator-badge">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                </div>
+                                <span class="font-medium">@soundwaves</span>
+                                <span class="text-xs text-gray-500 mt-1">Music</span>
+                                <div class="flex items-center mt-2">
+                                    <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                    <span class="text-xs font-medium ml-1">4.6</span>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-xl p-4 flex flex-col items-center card-hover shadow-sm hover:shadow-md">
+                                <div class="relative mb-3">
+                                    <div class="w-16 h-16 rounded-full bg-purple-100 flex items-center justify-center">
+                                        <i class="fas fa-user text-purple-500 text-xl"></i>
+                                    </div>
+                                    <div class="creator-badge">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                </div>
+                                <span class="font-medium">@visuals</span>
+                                <span class="text-xs text-gray-500 mt-1">Videos</span>
+                                <div class="flex items-center mt-2">
+                                    <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                    <span class="text-xs font-medium ml-1">4.7</span>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-xl p-4 flex flex-col items-center card-hover shadow-sm hover:shadow-md">
+                                <div class="relative mb-3">
+                                    <div class="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center">
+                                        <i class="fas fa-user text-green-500 text-xl"></i>
+                                    </div>
+                                    <div class="creator-badge">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                </div>
+                                <span class="font-medium">@typegenius</span>
+                                <span class="text-xs text-gray-500 mt-1">Fonts</span>
+                                <div class="flex items-center mt-2">
+                                    <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                    <span class="text-xs font-medium ml-1">4.9</span>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-xl p-4 flex flex-col items-center card-hover shadow-sm hover:shadow-md">
+                                <div class="relative mb-3">
+                                    <div class="w-16 h-16 rounded-full bg-yellow-100 flex items-center justify-center">
+                                        <i class="fas fa-user text-yellow-500 text-xl"></i>
+                                    </div>
+                                    <div class="creator-badge">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                </div>
+                                <span class="font-medium">@templatemaster</span>
+                                <span class="text-xs text-gray-500 mt-1">Templates</span>
+                                <div class="flex items-center mt-2">
+                                    <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                    <span class="text-xs font-medium ml-1">4.8</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <!-- Trending Now -->
+                    <section>
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="font-semibold text-xl">Trending Now</h3>
+                            <button class="text-blue-500 font-medium hover:text-blue-600">See all</button>
+                        </div>
+                        <div class="grid product-grid gap-6">
+                            <div class="bg-white rounded-xl overflow-hidden card-hover shadow-sm hover:shadow-md">
+                                <div class="h-48 bg-gradient-to-r from-pink-100 to-red-100 flex items-center justify-center relative">
+                                    <i class="fas fa-cube text-5xl text-pink-500 opacity-70"></i>
+                                    <div class="absolute bottom-3 left-3 bg-white bg-opacity-90 px-3 py-1 rounded-full flex items-center">
+                                        <div class="w-5 h-5 rounded-full bg-purple-200 mr-2"></div>
+                                        <span class="text-sm font-medium">@3dartist</span>
+                                    </div>
+                                    <div class="absolute top-3 right-3 bg-white bg-opacity-90 px-2 py-1 rounded-full">
+                                        <i class="fas fa-heart text-red-500"></i>
+                                    </div>
+                                </div>
+                                <div class="p-4">
+                                    <h4 class="font-medium mb-2">3D Character Model</h4>
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <span class="text-red-500 font-semibold">$29.99</span>
+                                            <span class="text-gray-400 text-sm line-through ml-1">$59.99</span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <div class="rating-stars">
+                                                <div class="stars-empty">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                                <div class="stars-filled" style="width: 92%">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                            </div>
+                                            <span class="text-gray-500 text-sm ml-1">4.6</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-xl overflow-hidden card-hover shadow-sm hover:shadow-md">
+                                <div class="h-48 bg-gradient-to-r from-indigo-100 to-blue-100 flex items-center justify-center relative">
+                                    <i class="fas fa-photo-film text-5xl text-indigo-500 opacity-70"></i>
+                                    <div class="absolute bottom-3 left-3 bg-white bg-opacity-90 px-3 py-1 rounded-full flex items-center">
+                                        <div class="w-5 h-5 rounded-full bg-green-200 mr-2"></div>
+                                        <span class="text-sm font-medium">@videowizard</span>
+                                    </div>
+                                    <div class="absolute top-3 right-3 bg-white bg-opacity-90 px-2 py-1 rounded-full">
+                                        <i class="far fa-heart text-gray-500"></i>
+                                    </div>
+                                </div>
+                                <div class="p-4">
+                                    <h4 class="font-medium mb-2">4K Video Pack</h4>
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <span class="text-red-500 font-semibold">$49.99</span>
+                                            <span class="text-gray-400 text-sm line-through ml-1">$99.99</span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <div class="rating-stars">
+                                                <div class="stars-empty">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                                <div class="stars-filled" style="width: 96%">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                            </div>
+                                            <span class="text-gray-500 text-sm ml-1">4.8</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-xl overflow-hidden card-hover shadow-sm hover:shadow-md">
+                                <div class="h-48 bg-gradient-to-r from-teal-100 to-cyan-100 flex items-center justify-center relative">
+                                    <i class="fas fa-file-code text-5xl text-teal-500 opacity-70"></i>
+                                    <div class="absolute bottom-3 left-3 bg-white bg-opacity-90 px-3 py-1 rounded-full flex items-center">
+                                        <div class="w-5 h-5 rounded-full bg-yellow-200 mr-2"></div>
+                                        <span class="text-sm font-medium">@webdev</span>
+                                    </div>
+                                    <div class="absolute top-3 right-3 bg-white bg-opacity-90 px-2 py-1 rounded-full">
+                                        <i class="fas fa-heart text-red-500"></i>
+                                    </div>
+                                </div>
+                                <div class="p-4">
+                                    <h4 class="font-medium mb-2">Website Template</h4>
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <span class="text-red-500 font-semibold">$24.99</span>
+                                            <span class="text-gray-400 text-sm line-through ml-1">$49.99</span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <div class="rating-stars">
+                                                <div class="stars-empty">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                                <div class="stars-filled" style="width: 98%">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                            </div>
+                                            <span class="text-gray-500 text-sm ml-1">4.9</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-xl overflow-hidden card-hover shadow-sm hover:shadow-md">
+                                <div class="h-48 bg-gradient-to-r from-orange-100 to-amber-100 flex items-center justify-center relative">
+                                    <i class="fas fa-headphones text-5xl text-orange-500 opacity-70"></i>
+                                    <div class="absolute bottom-3 left-3 bg-white bg-opacity-90 px-3 py-1 rounded-full flex items-center">
+                                        <div class="w-5 h-5 rounded-full bg-red-200 mr-2"></div>
+                                        <span class="text-sm font-medium">@beatsmith</span>
+                                    </div>
+                                    <div class="absolute top-3 right-3 bg-white bg-opacity-90 px-2 py-1 rounded-full">
+                                        <i class="far fa-heart text-gray-500"></i>
+                                    </div>
+                                </div>
+                                <div class="p-4">
+                                    <h4 class="font-medium mb-2">Royalty Free Music</h4>
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <span class="text-red-500 font-semibold">$14.99</span>
+                                            <span class="text-gray-400 text-sm line-through ml-1">$29.99</span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <div class="rating-stars">
+                                                <div class="stars-empty">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                                <div class="stars-filled" style="width: 90%">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                            </div>
+                                            <span class="text-gray-500 text-sm ml-1">4.5</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                
+                <!-- Browse Page -->
+                <div id="browse-page" class="page">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl font-semibold">Browse Assets</h2>
+                        <div class="flex items-center space-x-4">
+                            <div class="relative">
+                                <select class="appearance-none bg-white border border-gray-200 rounded-lg pl-4 pr-8 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                                    <option>All Categories</option>
+                                    <option>Graphics</option>
+                                    <option>Music</option>
+                                    <option>Videos</option>
+                                    <option>Templates</option>
+                                    <option>Fonts</option>
+                                    <option>3D Models</option>
+                                </select>
+                                <i class="fas fa-chevron-down absolute right-3 top-2.5 text-gray-400 pointer-events-none"></i>
+                            </div>
+                            <div class="relative">
+                                <select class="appearance-none bg-white border border-gray-200 rounded-lg pl-4 pr-8 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                                    <option>Popular</option>
+                                    <option>Newest</option>
+                                    <option>Price: Low to High</option>
+                                    <option>Price: High to Low</option>
+                                    <option>Highest Rated</option>
+                                </select>
+                                <i class="fas fa-chevron-down absolute right-3 top-2.5 text-gray-400 pointer-events-none"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid product-grid gap-6">
+                        <div class="bg-white rounded-xl overflow-hidden card-hover shadow-sm hover:shadow-md">
+                            <div class="h-48 bg-gradient-to-r from-blue-100 to-indigo-100 flex items-center justify-center relative">
+                                <i class="fas fa-image text-5xl text-blue-500 opacity-70"></i>
+                                <div class="absolute bottom-3 left-3 bg-white bg-opacity-90 px-3 py-1 rounded-full flex items-center">
+                                    <div class="w-5 h-5 rounded-full creator-gradient mr-2"></div>
+                                    <span class="text-sm font-medium">@designpro</span>
+                                </div>
+                                <div class="absolute top-3 right-3 bg-white bg-opacity-90 px-2 py-1 rounded-full">
+                                    <i class="far fa-heart text-gray-500"></i>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <h4 class="font-medium mb-2">UI Icon Set</h4>
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <span class="text-gray-800 font-semibold">$12.99</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="rating-stars">
+                                            <div class="stars-empty">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                            <div class="stars-filled" style="width: 88%">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                        </div>
+                                        <span class="text-gray-500 text-sm ml-1">4.4</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl overflow-hidden card-hover shadow-sm hover:shadow-md">
+                            <div class="h-48 bg-gradient-to-r from-purple-100 to-pink-100 flex items-center justify-center relative">
+                                <i class="fas fa-music text-5xl text-purple-500 opacity-70"></i>
+                                <div class="absolute bottom-3 left-3 bg-white bg-opacity-90 px-3 py-1 rounded-full flex items-center">
+                                    <div class="w-5 h-5 rounded-full bg-blue-200 mr-2"></div>
+                                    <span class="text-sm font-medium">@soundgenius</span>
+                                </div>
+                                <div class="absolute top-3 right-3 bg-white bg-opacity-90 px-2 py-1 rounded-full">
+                                    <i class="fas fa-heart text-red-500"></i>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <h4 class="font-medium mb-2">Electronic Beats</h4>
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <span class="text-gray-800 font-semibold">$8.99</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="rating-stars">
+                                            <div class="stars-empty">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                            <div class="stars-filled" style="width: 82%">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                            </div>
+                                            </div>
+                                            <span class="text-gray-500 text-sm ml-1">4.1</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white rounded-xl overflow-hidden card-hover shadow-sm hover:shadow-md">
+                                <div class="h-48 bg-gradient-to-r from-green-100 to-teal-100 flex items-center justify-center relative">
+                                    <i class="fas fa-video text-5xl text-green-500 opacity-70"></i>
+                                    <div class="absolute bottom-3 left-3 bg-white bg-opacity-90 px-3 py-1 rounded-full flex items-center">
+                                        <div class="w-5 h-5 rounded-full bg-purple-200 mr-2"></div>
+                                        <span class="text-sm font-medium">@videowizard</span>
+                                    </div>
+                                    <div class="absolute top-3 right-3 bg-white bg-opacity-90 px-2 py-1 rounded-full">
+                                        <i class="far fa-heart text-gray-500"></i>
+                                    </div>
+                                </div>
+                                <div class="p-4">
+                                    <h4 class="font-medium mb-2">Drone Footage Pack</h4>
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <span class="text-gray-800 font-semibold">$29.99</span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <div class="rating-stars">
+                                                <div class="stars-empty">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                                <div class="stars-filled" style="width: 96%">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                            </div>
+                                            <span class="text-gray-500 text-sm ml-1">4.8</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white rounded-xl overflow-hidden card-hover shadow-sm hover:shadow-md">
+                                <div class="h-48 bg-gradient-to-r from-yellow-100 to-orange-100 flex items-center justify-center relative">
+                                    <i class="fas fa-file-code text-5xl text-yellow-500 opacity-70"></i>
+                                    <div class="absolute bottom-3 left-3 bg-white bg-opacity-90 px-3 py-1 rounded-full flex items-center">
+                                        <div class="w-5 h-5 rounded-full bg-green-200 mr-2"></div>
+                                        <span class="text-sm font-medium">@webdev</span>
+                                    </div>
+                                    <div class="absolute top-3 right-3 bg-white bg-opacity-90 px-2 py-1 rounded-full">
+                                        <i class="fas fa-heart text-red-500"></i>
+                                    </div>
+                                </div>
+                                <div class="p-4">
+                                    <h4 class="font-medium mb-2">Portfolio Template</h4>
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <span class="text-gray-800 font-semibold">$19.99</span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <div class="rating-stars">
+                                                <div class="stars-empty">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                                <div class="stars-filled" style="width: 94%">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                            </div>
+                                            <span class="text-gray-500 text-sm ml-1">4.7</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white rounded-xl overflow-hidden card-hover shadow-sm hover:shadow-md">
+                                <div class="h-48 bg-gradient-to-r from-red-100 to-pink-100 flex items-center justify-center relative">
+                                    <i class="fas fa-font text-5xl text-red-500 opacity-70"></i>
+                                    <div class="absolute bottom-3 left-3 bg-white bg-opacity-90 px-3 py-1 rounded-full flex items-center">
+                                        <div class="w-5 h-5 rounded-full bg-yellow-200 mr-2"></div>
+                                        <span class="text-sm font-medium">@typegenius</span>
+                                    </div>
+                                    <div class="absolute top-3 right-3 bg-white bg-opacity-90 px-2 py-1 rounded-full">
+                                        <i class="far fa-heart text-gray-500"></i>
+                                    </div>
+                                </div>
+                                <div class="p-4">
+                                    <h4 class="font-medium mb-2">Handwritten Font</h4>
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <span class="text-gray-800 font-semibold">$14.99</span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <div class="rating-stars">
+                                                <div class="stars-empty">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                                <div class="stars-filled" style="width: 90%">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                            </div>
+                                            <span class="text-gray-500 text-sm ml-1">4.5</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white rounded-xl overflow-hidden card-hover shadow-sm hover:shadow-md">
+                                <div class="h-48 bg-gradient-to-r from-indigo-100 to-blue-100 flex items-center justify-center relative">
+                                    <i class="fas fa-cube text-5xl text-indigo-500 opacity-70"></i>
+                                    <div class="absolute bottom-3 left-3 bg-white bg-opacity-90 px-3 py-1 rounded-full flex items-center">
+                                        <div class="w-5 h-5 rounded-full bg-pink-200 mr-2"></div>
+                                        <span class="text-sm font-medium">@3dartist</span>
+                                    </div>
+                                    <div class="absolute top-3 right-3 bg-white bg-opacity-90 px-2 py-1 rounded-full">
+                                        <i class="fas fa-heart text-red-500"></i>
+                                    </div>
+                                </div>
+                                <div class="p-4">
+                                    <h4 class="font-medium mb-2">Furniture 3D Models</h4>
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <span class="text-gray-800 font-semibold">$24.99</span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <div class="rating-stars">
+                                                <div class="stars-empty">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                                <div class="stars-filled" style="width: 92%">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                            </div>
+                                            <span class="text-gray-500 text-sm ml-1">4.6</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white rounded-xl overflow-hidden card-hover shadow-sm hover:shadow-md">
+                                <div class="h-48 bg-gradient-to-r from-teal-100 to-cyan-100 flex items-center justify-center relative">
+                                    <i class="fas fa-image text-5xl text-teal-500 opacity-70"></i>
+                                    <div class="absolute bottom-3 left-3 bg-white bg-opacity-90 px-3 py-1 rounded-full flex items-center">
+                                        <div class="w-5 h-5 rounded-full creator-gradient mr-2"></div>
+                                        <span class="text-sm font-medium">@designpro</span>
+                                    </div>
+                                    <div class="absolute top-3 right-3 bg-white bg-opacity-90 px-2 py-1 rounded-full">
+                                        <i class="far fa-heart text-gray-500"></i>
+                                    </div>
+                                </div>
+                                <div class="p-4">
+                                    <h4 class="font-medium mb-2">Abstract Backgrounds</h4>
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <span class="text-gray-800 font-semibold">$9.99</span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <div class="rating-stars">
+                                                <div class="stars-empty">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                                <div class="stars-filled" style="width: 88%">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                            </div>
+                                            <span class="text-gray-500 text-sm ml-1">4.4</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white rounded-xl overflow-hidden card-hover shadow-sm hover:shadow-md">
+                                <div class="h-48 bg-gradient-to-r from-amber-100 to-orange-100 flex items-center justify-center relative">
+                                    <i class="fas fa-headphones text-5xl text-amber-500 opacity-70"></i>
+                                    <div class="absolute bottom-3 left-3 bg-white bg-opacity-90 px-3 py-1 rounded-full flex items-center">
+                                        <div class="w-5 h-5 rounded-full bg-blue-200 mr-2"></div>
+                                        <span class="text-sm font-medium">@soundgenius</span>
+                                    </div>
+                                    <div class="absolute top-3 right-3 bg-white bg-opacity-90 px-2 py-1 rounded-full">
+                                        <i class="fas fa-heart text-red-500"></i>
+                                    </div>
+                                </div>
+                                <div class="p-4">
+                                    <h4 class="font-medium mb-2">Cinematic Soundtrack</h4>
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <span class="text-gray-800 font-semibold">$12.99</span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <div class="rating-stars">
+                                                <div class="stars-empty">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                                <div class="stars-filled" style="width: 94%">
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                            </div>
+                                            <span class="text-gray-500 text-sm ml-1">4.7</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8 flex justify-center">
+                            <nav class="flex items-center space-x-2">
+                                <button class="px-3 py-1 rounded border border-gray-200 text-gray-500 hover:bg-gray-50">Previous</button>
+                                <button class="px-3 py-1 rounded bg-blue-500 text-white">1</button>
+                                <button class="px-3 py-1 rounded border border-gray-200 text-gray-700 hover:bg-gray-50">2</button>
+                                <button class="px-3 py-1 rounded border border-gray-200 text-gray-700 hover:bg-gray-50">3</button>
+                                <button class="px-3 py-1 rounded border border-gray-200 text-gray-500 hover:bg-gray-50">Next</button>
+                            </nav>
+                        </div>
+                    </div>
+                    
+                    <!-- Cart Page -->
+                    <div id="cart-page" class="page">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-2xl font-semibold">Your Cart</h2>
+                            <div class="text-gray-500">3 items</div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-sm overflow-hidden mb-6">
+                            <div class="divide-y divide-gray-200">
+                                <!-- Cart Item 1 -->
+                                <div class="p-4 flex items-start space-x-4 cart-item">
+                                    <div class="w-20 h-20 rounded-lg bg-gradient-to-r from-blue-100 to-purple-100 flex items-center justify-center">
+                                        <i class="fas fa-image text-blue-500 text-xl"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between">
+                                            <div>
+                                                <h4 class="font-medium">Minimal UI Kit</h4>
+                                                <p class="text-sm text-gray-500">by @designpro</p>
+                                            </div>
+                                            <div class="text-right">
+                                                <span class="font-medium">$14.99</span>
+                                                <p class="text-sm text-gray-500 line-through">$29.99</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center justify-between mt-3">
+                                            <div class="flex items-center space-x-2">
+                                                <button class="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50">
+                                                    <i class="fas fa-minus text-gray-500 text-xs"></i>
+                                                </button>
+                                                <span class="w-8 text-center">1</span>
+                                                <button class="w-8 h-8 rounded-full border border-gray-200
+</html>

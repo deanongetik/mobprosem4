@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CreatorsHub | Digital Asset Marketplace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #f5f5f7;
+            color: #1d1d1f;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+        }
+        
+        .creator-gradient {
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .countdown-timer {
+            font-feature-settings: "tnum";
+            font-variant-numeric: tabular-nums;
+        }
+        
+        .tab-active {
+            position: relative;
+            color: #0071e3;
+        }
+        
+        .tab-active:after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background-color: #0071e3;
+            border-radius: 3px;
+        }
+        
+        .file-upload {
+            border: 2px dashed #d1d5db;
+            transition: all 0.3s ease;
+        }
+        
+        .file-upload:hover {
+            border-color: #a777e3;
+            background-color: #f9fafb;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background-color: #e5e7eb;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6e8efb, #a777e3);
+            transition: width 0.3s ease;
+        }
+        
+        .floating-action-btn {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body class="max-w-md mx-auto bg-white min-h-screen relative pb-20">
+    <!-- App Header -->
+    <header class="sticky top-0 z-10 bg-white bg-opacity-90 backdrop-blur-sm border-b border-gray-100">
+        <div class="px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <div class="gradient-bg w-8 h-8 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-palette text-white text-sm"></i>
+                </div>
+                <h1 class="font-semibold text-lg">CreatorsHub</h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="text-gray-600">
+                    <i class="fas fa-search text-lg"></i>
+                </button>
+                <button class="text-gray-600 relative">
+                    <i class="fas fa-shopping-cart text-lg"></i>
+                    <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content (Dynamic based on page) -->
+    <main id="app-content" class="px-4 py-3">
+        <!-- Home Page (Default View) -->
+        <div id="home-page">
+            <!-- Hero Section -->
+            <section class="gradient-bg rounded-2xl p-6 text-white mb-6">
+                <h2 class="text-2xl font-bold mb-2">Sell & Discover Digital Assets</h2>
+                <p class="text-white text-opacity-90 mb-4">Join our community of 10,000+ creators</p>
+                <button class="bg-white text-purple-600 font-medium px-4 py-2 rounded-full">Start Selling</button>
+            </section>
+            
+            <!-- Categories -->
+            <section class="mb-8">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-semibold text-lg">Browse Categories</h3>
+                    <button class="text-blue-500 text-sm font-medium">See all</button>
+                </div>
+                <div class="grid grid-cols-4 gap-3">
+                    <div class="bg-gray-50 rounded-xl p-3 flex flex-col items-center">
+                        <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-2">
+                            <i class="fas fa-image text-blue-500"></i>
+                        </div>
+                        <span class="text-xs font-medium">Graphics</span>
+                    </div>
+                    <div class="bg-gray-50 rounded-xl p-3 flex flex-col items-center">
+                        <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mb-2">
+                            <i class="fas fa-music text-purple-500"></i>
+                        </div>
+                        <span class="text-xs font-medium">Music</span>
+                    </div>
+                    <div class="bg-gray-50 rounded-xl p-3 flex flex-col items-center">
+                        <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mb-2">
+                            <i class="fas fa-video text-green-500"></i>
+                        </div>
+                        <span class="text-xs font-medium">Videos</span>
+                    </div>
+                    <div class="bg-gray-50 rounded-xl p-3 flex flex-col items-center">
+                        <div class="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center mb-2">
+                            <i class="fas fa-file-code text-yellow-500"></i>
+                        </div>
+                        <span class="text-xs font-medium">Templates</span>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- New Arrivals with Countdown -->
+            <section class="mb-8">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h3 class="font-semibold text-lg">New Arrivals</h3>
+                        <p class="text-xs text-gray-500">Limited time offer</p>
+                    </div>
+                    <div class="bg-gray-100 px-3 py-1 rounded-full flex items-center countdown-timer">
+                        <i class="fas fa-clock text-gray-500 mr-2 text-sm"></i>
+                        <span class="font-medium text-sm">23:59:59</span>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-gray-50 rounded-xl overflow-hidden card-hover">
+                        <div class="h-32 bg-gradient-to-r from-blue-100 to-purple-100 flex items-center justify-center relative">
+                            <i class="fas fa-image text-3xl text-blue-500 opacity-70"></i>
+                            <div class="absolute bottom-2 left-2 bg-white bg-opacity-90 px-2 py-1 rounded-full flex items-center">
+                                <div class="w-4 h-4 rounded-full creator-gradient mr-1"></div>
+                                <span class="text-xs font-medium">@designpro</span>
+                            </div>
+                        </div>
+                        <div class="p-3">
+                            <h4 class="font-medium text-sm mb-1">Minimal UI Kit</h4>
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <span class="text-red-500 font-semibold text-sm">$14.99</span>
+                                    <span class="text-gray-400 text-xs line-through ml-1">$29.99</span>
+                                </div>
+                                <button class="text-blue-500">
+                                    <i class="fas fa-plus-circle"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 rounded-xl overflow-hidden card-hover">
+                        <div class="h-32 bg-gradient-to-r from-green-100 to-teal-100 flex items-center justify-center relative">
+                            <i class="fas fa-headphones text-3xl text-green-500 opacity-70"></i>
+                            <div class="absolute bottom-2 left-2 bg-white bg-opacity-90 px-2 py-1 rounded-full flex items-center">
+                                <div class="w-4 h-4 rounded-full bg-pink-200 mr-1"></div>
+                                <span class="text-xs font-medium">@soundwaves</span>
+                            </div>
+                        </div>
+                        <div class="p-3">
+                            <h4 class="font-medium text-sm mb-1">Ambient Sounds</h4>
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <span class="text-red-500 font-semibold text-sm">$9.99</span>
+                                    <span class="text-gray-400 text-xs line-through ml-1">$19.99</span>
+                                </div>
+                                <button class="text-blue-500">
+                                    <i class="fas fa-plus-circle"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Top Creators -->
+            <section class="mb-8">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-semibold text-lg">Top Creators</h3>
+                    <button class="text-blue-500 text-sm font-medium">See all</button>
+                </div>
+                <div class="flex space-x-4 overflow-x-auto pb-2">
+                    <div class="flex flex-col items-center">
+                        <div class="w-16 h-16 rounded-full creator-gradient flex items-center justify-center mb-2">
+                            <i class="fas fa-paint-brush text-white"></i>
+                        </div>
+                        <span class="text-xs font-medium">@designpro</span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-r from-blue-200 to-cyan-200 flex items-center justify-center mb-2">
+                            <i class="fas fa-code text-blue-600"></i>
+                        </div>
+                        <span class="text-xs font-medium">@devtools</span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-r from-purple-200 to-pink-200 flex items-center justify-center mb-2">
+                            <i class="fas fa-music text-purple-600"></i>
+                        </div>
+                        <span class="text-xs font-medium">@soundwaves</span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-r from-yellow-200 to-orange-200 flex items-center justify-center mb-2">
+                            <i class="fas fa-camera text-yellow-600"></i>
+                        </div>
+                        <span class="text-xs font-medium">@visuals</span>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Featured Products -->
+            <section>
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-semibold text-lg">Featured Products</h3>
+                    <button class="text-blue-500 text-sm font-medium">See all</button>
+                </div>
+                <div class="space-y-3">
+                    <div class="bg-gray-50 rounded-xl p-3 flex items-center card-hover">
+                        <div class="w-16 h-16 bg-gradient-to-r from-purple-100 to-pink-100 rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-photo-film text-xl text-purple-500"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-medium text-sm mb-1">Social Media Pack <span class="text-gray-400 text-xs">by @designpro</span></h4>
+                            <p class="text-gray-500 text-xs">50 templates for Instagram</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="font-semibold text-sm">$24.99</span>
+                            <div class="flex items-center justify-end mt-1">
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <span class="text-gray-500 text-xs ml-1">4.8</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 rounded-xl p-3 flex items-center card-hover">
+                        <div class="w-16 h-16 bg-gradient-to-r from-blue-100 to-cyan-100 rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-file-code text-xl text-blue-500"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-medium text-sm mb-1">Portfolio Template <span class="text-gray-400 text-xs">by @devtools</span></h4>
+                            <p class="text-gray-500 text-xs">Fully responsive HTML/CSS</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="font-semibold text-sm">$19.99</span>
+                            <div class="flex items-center justify-end mt-1">
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                <span class="text-gray-500 text-xs ml-1">4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <!-- Product Detail Page (Hidden by default) -->
+        <div id="product-page" class="hidden">
+            <div class="mb-4">
+                <button id="back-button" class="text-blue-500">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+            </div>
+            
+            <div class="bg-gradient-to-r from-blue-100 to-purple-100 rounded-2xl h-64 flex items-center justify-center mb-6 relative">
+                <i class="fas fa-image text-6xl text-blue-500 opacity-70"></i>
+                <div class="absolute bottom-3 left-3 bg-white bg-opacity-90 px-3 py-1 rounded-full flex items-center">
+                    <div class="w-5 h-5 rounded-full creator-gradient mr-2"></div>
+                    <span class="text-sm font-medium">@designpro</span>
+                </div>
+            </div>
+            
+            <div class="mb-6">
+                <div class="flex items-center justify-between mb-2">
+                    <h2 class="text-xl font-bold">Minimal UI Kit</h2>
+                    <div class="flex items-center">
+                        <i class="fas fa-star text-yellow-400 text-sm"></i>
+                        <span class="text-gray-700 text-sm ml-1">4.8</span>
+                        <span class="text-gray-400 text-sm mx-1">•</span>
+                        <span class="text-gray-500 text-sm">128 sales</span>
+                    </div>
+                </div>
+                
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <span class="text-red-500 font-semibold text-lg">$14.99</span>
+                        <span class="text-gray-400 text-sm line-through ml-1">$29.99</span>
+                    </div>
+                    <div class="bg-blue-500 text-white text-xs px-2 py-1 rounded-full">
+                        50% OFF
+                    </div>
+                </div>
+                
+                <p class="text-gray-600 text-sm mb-4">
+                    A complete set of minimalist UI components for your next design project. Includes 100+ customizable elements with light and dark mode support.
+                </p>
+                
+                <div class="flex items-center space-x-2 mb-6">
+                    <div class="bg-gray-100 px-3 py-1 rounded-full text-xs">
+                        <i class="fas fa-tag text-gray-500 mr-1"></i>
+                        <span>UI Templates</span>
+                    </div>
+                    <div class="bg-gray-100 px-3 py-1 rounded-full text-xs">
+                        <i class="fas fa-download text-gray-500 mr-1"></i>
+                        <span>2.4MB</span>
+                    </div>
+                    <div class="bg-gray-100 px-3 py-1 rounded-full text-xs">
+                        <i class="fas fa-file-archive text-gray-500 mr-1"></i>
+                        <span>ZIP</span>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h3 class="font-medium text-sm mb-2">What's included</h3>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li class="flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                            <span>100+ UI components</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                            <span>Light & Dark variants</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                            <span>Figma & Sketch files</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                            <span>Lifetime updates</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="mb-6">
+                    <h3 class="font-medium text-sm mb-2">Promo Code</h3>
+                    <div class="flex items-center">
+                        <input type="text" placeholder="Enter promo code" class="flex-1 border border-gray-200 rounded-l-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500">
+                        <button class="bg-blue-500 text-white px-4 py-2 rounded-r-lg text-sm font-medium">Apply</button>
+                    </div>
+                </div>
+                
+                <button class="w-full bg-blue-500 text-white py-3 rounded-xl font-medium flex items-center justify-center">
+                    <i class="fas fa-shopping-cart mr-2"></i>
+                    Add to Cart - $14.99
+                </button>
+            </div>
+        </div>
+        
+        <!-- Cart Page (Hidden by default) -->
+        <div id="cart-page" class="hidden">
+            <div class="flex items-center justify-between mb-6">
+                <button id="back-button-cart" class="text-blue-500">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2 class="text-xl font-bold">Your Cart</h2>
+                <div class="w-6"></div> <!-- Spacer for balance -->
+            </div>
+            
+            <div class="space-y-4 mb-6">
+                <div class="bg-gray-50 rounded-xl p-3 flex items-center">
+                    <div class="w-16 h-16 bg-gradient-to-r from-blue-100 to-purple-100 rounded-lg flex items-center justify-center mr-3">
+                        <i class="fas fa-image text-xl text-blue-500"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="font-medium text-sm mb-1">Minimal UI Kit <span class="text-gray-400 text-xs">by @designpro</span></h4>
+                        <div class="flex items-center">
+                            <span class="text-red-500 font-semibold text-sm">$14.99</span>
+                            <span class="text-gray-400 text-xs line-through ml-1">$29.99</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <button class="w-8 h-8 border border-gray-200 rounded-full flex items-center justify-center">
+                            <i class="fas fa-minus text-gray-500 text-xs"></i>
+                        </button>
+                        <span class="mx-3">1</span>
+                        <button class="w-8 h-8 border border-gray-200 rounded-full flex items-center justify-center">
+                            <i class="fas fa-plus text-gray-500 text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 rounded-xl p-3 flex items-center">
+                    <div class="w-16 h-16 bg-gradient-to-r from-green-100 to-teal-100 rounded-lg flex items-center justify-center mr-3">
+                        <i class="fas fa-headphones text-xl text-green-500"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="font-medium text-sm mb-1">Ambient Sounds <span class="text-gray-400 text-xs">by @soundwaves</span></h4>
+                        <div class="flex items-center">
+                            <span class="text-red-500 font-semibold text-sm">$9.99</span>
+                            <span class="text-gray-400 text-xs line-through ml-1">$19.99</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <button class="w-8 h-8 border border-gray-200 rounded-full flex items-center justify-center">
+                            <i class="fas fa-minus text-gray-500 text-xs"></i>
+                        </button>
+                        <span class="mx-3">1</span>
+                        <button class="w-8 h-8 border border-gray-200 rounded-full flex items-center justify-center">
+                            <i class="fas fa-plus text-gray-500 text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-gray-50 rounded-xl p-4 mb-6">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-gray-600">Subtotal</span>
+                    <span class="font-medium">$24.98</span>
+                </div>
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-gray-600">Discount</span>
+                    <span class="text-green-500 font-medium">-$5.00</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-gray-600">Total</span>
+                    <span class="font-bold text-lg">$19.98</span>
+                </div>
+            </div>
+            
+            <button class="w-full bg-blue-500 text-white py-3 rounded-xl font-medium mb-4">
+                Proceed to Checkout
+            </button>
+            
+            <div class="text-center">
+                <button class="text-blue-500 text-sm font-medium">
+                    <i class="fas fa-plus-circle mr-1"></i>
+                    Add Promo Code
+                </button>
+            </div>
+        </div>
+        
+        <!-- Checkout Page (Hidden by default) -->
+        <div id="checkout-page" class="hidden">
+            <div class="flex items-center justify-between mb-6">
+                <button id="back-button-checkout" class="text-blue-500">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2 class="text-xl font-bold">Checkout</h2>
+                <div class="w-6"></div> <!-- Spacer for balance -->
+            </div>
+            
+            <div class="mb-6">
+                <h3 class="font-medium text-sm mb-3">Payment Method</h3>
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between bg-gray-50 rounded-xl p-4">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
+                                <i class="fab fa-cc-apple-pay text-blue-500"></i>
+                            </div>
+                            <span>Apple Pay</span>
+                        </div>
+                        <i class="fas fa-check-circle text-blue-500"></i>
+                    </div>
+                    <div class="flex items-center justify-between bg-gray-50 rounded-xl p-4">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mr-3">
+                                <i class="fab fa-cc-stripe text-purple-500"></i>
+                            </div>
+                            <span>Credit Card</span>
+                        </div>
+                        <i class="fas fa-circle text-gray-300"></i>
+                    </div>
+                    <div class="flex items-center justify-between bg-gray-50 rounded-xl p-4">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center mr-3">
+                                <i class="fab fa-cc-paypal text-yellow-500"></i>
+                            </div>
+                            <span>PayPal</span>
+                        </div>
+                        <i class="fas fa-circle text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-6">
+                <h3 class="font-medium text-sm mb-3">Order Summary</h3>
+                <div class="bg-gray-50 rounded-xl p-4">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-gray-600">Minimal UI Kit</span>
+                        <span class="font-medium">$14.99</span>
+                    </div>
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-gray-600">Ambient Sounds</span>
+                        <span class="font-medium">$9.99</span>
+                    </div>
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-gray-600">Discount</span>
+                        <span class="text-green-500 font-medium">-$5.00</span>
+                    </div>
+                    <div class="border-t border-gray-200 pt-3 mt-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-600">Total</span>
+                            <span class="font-bold text-lg">$19.98</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="w-full bg-blue-500 text-white py-3 rounded-xl font-medium mb-4">
+                <i class="fas fa-lock mr-2"></i>
+                Pay with Apple Pay
+            </button>
+            
+            <div class="text-center text-xs text-gray-500">
+                <p>Your purchase will be available immediately after payment</p>
+            </div>
+        </div>
+        
+        <!-- Profile Page (Hidden by default) -->
+        <div id="profile-page" class="hidden">
+            <div class="flex items-center justify-between mb-6">
+                <button id="back-button-profile" class="text-blue-500">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2 class="text-xl font-bold">My Account</h2>
+                <div class="w-6"></div> <!-- Spacer for balance -->
+            </div>
+            
+            <div class="flex flex-col items-center mb-6">
+                <div class="w-20 h-20 rounded-full gradient-bg flex items-center justify-center mb-3">
+                    <i class="fas fa-user text-white text-2xl"></i>
+                </div>
+                <h3 class="font-bold text-lg">John Doe</h3>
+                <p class="text-gray-500 text-sm">Creator since May 2023</p>
+            </div>
+            
+            <div class="space-y-3 mb-6">
+                <div class="bg-gray-50 rounded-xl p-4 flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-download text-blue-500"></i>
+                        </div>
+                        <span class="font-medium">Downloads</span>
+                    </div>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                </div>
+                
+                <div class="bg-gray-50 rounded-xl p-4 flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-receipt text-purple-500"></i>
+                        </div>
+                        <span class="font-medium">Purchase History</span>
+                    </div>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                </div>
+                
+                <div class="bg-gray-50 rounded-xl p-4 flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-heart text-green-500"></i>
+                        </div>
+                        <span class="font-medium">Wishlist</span>
+                    </div>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                </div>
+                
+                <div class="bg-gray-50 rounded-xl p-4 flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-upload text-yellow-500"></i>
+                        </div>
+                        <span class="font-medium">My Uploads</span>
+                    </div>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                </div>
+                
+                <div class="bg-gray-50 rounded-xl p-4 flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center mr-3">
+                            <i class="fas fa-cog text-red-500"></i>
+                        </div>
+                        <span class="font-medium">Settings</span>
+                    </div>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                </div>
+            </div>
+            
+            <button class="w-full border border-gray-200 text-gray-700 py-3 rounded-xl font-medium">
+                Sign Out
+            </button>
+        </div>
+        
+        <!-- Upload Page (Hidden by default) -->
+        <div id="upload-page" class="hidden">
+            <div class="flex items-center justify-between mb-6">
+                <button id="back-button-upload" class="text-blue-500">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2 class="text-xl font-bold">Upload Asset</h2>
+                <div class="w-6"></div> <!-- Spacer for balance -->
+            </div>
+            
+            <div class="mb-6">
+                <label class="block text-sm font-medium mb-2">Asset Title</label>
+                <input type="text" placeholder="e.g. Minimal UI Kit" class="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-1 focus:ring-blue-500">
+            </div>
+            
+            <div class="mb-6">
+                <label class="block text-sm font-medium mb-2">Description</label>
+                <textarea placeholder="Describe your asset in detail..." class="w-full border border-gray-200 rounded-xl px-4 py-3 h-32 focus:outline-none focus:ring-1 focus:ring-blue-500"></textarea>
+            </div>
+            
+            <div class="mb-6">
+                <label class="block text-sm font-medium mb-2">Category</label>
+                <select class="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                    <option>Select category</option>
+                    <option>Graphics</option>
+                    <option>Music</option>
+                    <option>Videos</option>
+                    <option>Templates</option>
+                    <option>Fonts</option>
+                    <option>3D Models</option>
+                </select>
+            </div>
+            
+            <div class="mb-6">
+                <label class="block text-sm font-medium mb-2">Price</label>
+                <div class="flex items-center">
+                    <span class="mr-2">$</span>
+                    <input type="number" placeholder="0.00" class="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                </div>
+            </div>
+            
+            <div class="mb-6">
+                <label class="block text-sm font-medium mb-2">Preview Image</label>
+                <div class="file-upload rounded-xl p-6 flex flex-col items-center justify-center text-center cursor-pointer">
+                    <i class="fas fa-cloud-arrow-up text-3xl text-gray-400 mb-2"></i>
+                    <p class="text-sm text-gray-500">Drag & drop files here or click to browse</p>
+                    <p class="text-xs text-gray-400 mt-1">JPG, PNG (Max 5MB)</p>
+                </div>
+            </div>
+            
+            <div class="mb-6">
+                <label class="block text-sm font-medium mb-2">Asset Files</label>
+                <div class="file-upload rounded-xl p-6 flex flex-col items-center justify-center text-center cursor-pointer">
+                    <i class="fas fa-file-archive text-3xl text-gray-400 mb-2"></i>
+                    <p class="text-sm text-gray-500">Drag & drop files here or click to browse</p>
+                    <p class="text-xs text-gray-400 mt-1">ZIP, RAR (Max 500MB)</p>
+                </div>
+            </div>
+            
+            <div class="mb-6">
+                <label class="block text-sm font-medium mb-2">Upload Progress</label>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 45%"></div>
+                </div>
+                <p class="text-xs text-gray-500 mt-1">Uploading... 45% complete</p>
+            </div>
+            
+            <button class="w-full bg-blue-500 text-white py-3 rounded-xl font-medium">
+                Publish Asset
+            </button>
+        </div>
+        
+        <!-- Downloads Page (Hidden by default) -->
+        <div id="downloads-page" class="hidden">
+            <div class="flex items-center justify-between mb-6">
+                <button id="back-button-downloads" class="text-blue-500">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2 class="text-xl font-bold">My Downloads</h2>
+                <div class="w-6"></div> <!-- Spacer for balance -->
+            </div>
+            
+            <div class="space-y-3">
+                <div class="bg-gray-50 rounded-xl p-3 flex items-center">
+                    <div class="w-16 h-16 bg-gradient-to-r from-blue-100 to-purple-100 rounded-lg flex items-center justify-center mr-3">
+                        <i class="fas fa-image text-xl text-blue-500"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="font-medium text-sm mb-1">Minimal UI Kit <span class="text-gray-400 text-xs">by @designpro</span></h4>
+                        <p class="text-gray-500 text-xs">Purchased on May 15, 2023</p>
+                    </div>
+                    <button class="text-blue-500">
+                        <i class="fas fa-download"></i>
+                    </button>
+                </div>
+                
+                <div class="bg-gray-50 rounded-xl p-3 flex items-center">
+                    <div class="w-16 h-16 bg-gradient-to-r from-green-100 to-teal-100 rounded-lg flex items-center justify-center mr-3">
+                        <i class="fas fa-headphones text-xl text-green-500"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="font-medium text-sm mb-1">Ambient Sounds <span class="text-gray-400 text-xs">by @soundwaves</span></h4>
+                        <p class="text-gray-500 text-xs">Purchased on May 10, 2023</p>
+                    </div>
+                    <button class="text-blue-500">
+                        <i class="fas fa-download"></i>
+                    </button>
+                </div>
+                
+                <div class="bg-gray-50 rounded-xl p-3 flex items-center">
+                    <div class="w-16 h-16 bg-gradient-to-r from-purple-100 to-pink-100 rounded-lg flex items-center justify-center mr-3">
+                        <i class="fas fa-photo-film text-xl text-purple-500"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="font-medium text-sm mb-1">Social Media Pack <span class="text-gray-400 text-xs">by @designpro</span></h4>
+                        <p class="text-gray-500 text-xs">Purchased on Apr 28, 2023</p>
+                    </div>
+                    <button class="text-blue-500">
+                        <i class="fas fa-download"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Login Page (Hidden by default) -->
+        <div id="login-page" class="hidden">
+            <div class="flex flex-col items-center justify-center min-h-[80vh]">
+                <div class="gradient-bg w-16 h-16 rounded-2xl flex items-center justify-center mb-6">
+                    <i class="fas fa-palette text-white text-2xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold mb-2">Welcome Back</h2>
+                <p class="text-gray-500 mb-8">Sign in to your account</p>
+                
+                <div class="w-full space-y-4">
+                    <div>
+                        <input type="email" placeholder="Email address" class="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <input type="password" placeholder="Password" class="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                    </div>
+                    
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center">
+                            <input type="checkbox" id="remember" class="mr-2">
+                            <label for="remember" class="text-sm">Remember me</label>
+                        </div>
+                        <a href="#" class="text-blue-500 text-sm">Forgot password?</a>
+                    </div>
+                    
+                    <button class="w-full bg-blue-500 text-white py-3 rounded-xl font-medium">
+                        Sign In
+                    </button>
+                    
+                    <div class="text-center text-sm mt-4">
+                        <span class="text-gray-500">Don't have an account? </span>
+                        <a href="#" id="show-register" class="text-blue-500 font-medium">Sign up</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Register Page (Hidden by default) -->
+        <div id="register-page" class="hidden">
+            <div class="flex flex-col items-center justify-center min-h-[80vh]">
+                <div class="gradient-bg w-16 h-16 rounded-2xl flex items-center justify-center mb-6">
+                    <i class="fas fa-palette text-white text-2xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold mb-2">Create Account</h2>
+                <p class="text-gray-500 mb-8">Join our creative community</p>
+                
+                <div class="w-full space-y-4">
+                    <div>
+                        <input type="text" placeholder="Full name" class="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <input type="text" placeholder="Username" class="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <input type="email" placeholder="Email address" class="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <input type="password" placeholder="Password" class="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                    </div>
+                    
+                    <div class="flex items-center mb-6">
+                        <input type="checkbox" id="terms" class="mr-2">
+                        <label for="terms" class="text-sm">I agree to the <a href="#" class="text-blue-500">Terms</a> and <a href="#" class="text-blue-500">Privacy Policy</a></label>
+                    </div>
+                    
+                    <button class="w-full bg-blue-500 text-white py-3 rounded-xl font-medium">
+                        Create Account
+                    </button>
+                    
+                    <div class="text-center text-sm mt-4">
+                        <span class="text-gray-500">Already have an account? </span>
+                        <a href="#" id="show-login" class="text-blue-500 font-medium">Sign in</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 flex justify-around py-2 px-4">
+        <button class="tab-button py-2 px-4 flex flex-col items-center text-blue-500 tab-active" data-page="home-page">
+            <i class="fas fa-home text-lg mb-1"></i>
+            <span class="text-xs">Home</span>
+        </button>
+        <button class="tab-button py-2 px-4 flex flex-col items-center text-gray-500" data-page="product-page">
+            <i class="fas fa-search text-lg mb-1"></i>
+            <span class="text-xs">Browse</span>
+        </button>
+        <button class="tab-button py-2 px-4 flex flex-col items-center text-gray-500" data-page="cart-page">
+            <div class="relative">
+                <i class="fas fa-shopping-cart text-lg mb-1"></i>
+                <span class="absolute -top-1 -right-3 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">2</span>
+            </div>
+            <span class="text-xs">Cart</span>
+        </button>
+        <button class="tab-button py-2 px-4 flex flex-col items-center text-gray-500" data-page="profile-page">
+            <i class="fas fa-user text-lg mb-1"></i>
+            <span class="text-xs">Profile</span>
+        </button>
+    </nav>
+
+    <!-- Floating Action Button -->
+    <button id="upload-fab" class="fixed bottom-20 right-4 gradient-bg text-white w-14 h-14 rounded-full flex items-center justify-center floating-action-btn">
+        <i class="fas fa-plus text-xl"></i>
+    </button>
+
+    <script>
+        // Simple navigation between pages
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab navigation
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const pages = document.querySelectorAll('[id$="-page"]');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('text-blue-500', 'tab-active');
+                        btn.classList.add('text-gray-500');
+                    });
+                    
+                    // Add active class to clicked tab
+                    this.classList.remove('text-gray-500');
+                    this.classList.add('text-blue-500', 'tab-active');
+                    
+                    // Hide all pages
+                    pages.forEach(page => {
+                        page.classList.add('hidden');
+                    });
+                    
+                    // Show selected page
+                    const pageId = this.getAttribute('data-page');
+                    document.getElementById(pageId).classList.remove('hidden');
+                });
+            });
+            
+            // Back buttons
+            document.getElementById('back-button')?.addEventListener('click', function() {
+                document.getElementById('product-page').classList.add('hidden');
+                document.getElementById('home-page').classList.remove('hidden');
+                
+                // Update tab state
+                tabButtons.forEach(btn => {
+                    btn.classList.remove('text-blue-500', 'tab-active');
+                    btn.classList.add('text-gray-500');
+                });
+                
+                document.querySelector('[data-page="home-page"]').classList.add('text-blue-500', 'tab-active');
+            });
+            
+            document.getElementById('back-button-cart')?.addEventListener('click', function() {
+                document.getElementById('cart-page').classList.add('hidden');
+                document.getElementById('home-page').classList.remove('hidden');
+                
+                // Update tab state
+                tabButtons.forEach(btn => {
+                    btn.classList.remove('text-blue-500', 'tab-active');
+                    btn.classList.add('text-gray-500');
+                });
+                
+                document.querySelector('[data-page="home-page"]').classList.add('text-blue-500', 'tab-active');
+            });
+            
+            document.getElementById('back-button-checkout')?.addEventListener('click', function() {
+                document.getElementById('checkout-page').classList.add('hidden');
+                document.getElementById('cart-page').classList.remove('hidden');
+                
+                // Update tab state
+                tabButtons.forEach(btn => {
+                    btn.classList.remove('text-blue-500', 'tab-active');
+                    btn.classList.add('text-gray-500');
+                });
+                
+                document.querySelector('[data-page="cart-page"]').classList.add('text-blue-500', 'tab-active');
+            });
+            
+            document.getElementById('back-button-profile')?.addEventListener('click', function() {
+                document.getElementById('profile-page').classList.add('hidden');
+                document.getElementById('home-page').classList.remove('hidden');
+                
+                // Update tab state
+                tabButtons.forEach(btn => {
+                    btn.classList.remove('text-blue-500', 'tab-active');
+                    btn.classList.add('text-gray-500');
+                });
+                
+                document.querySelector('[data-page="home-page"]').classList.add('text-blue-500', 'tab-active');
+            });
+            
+            document.getElementById('back-button-upload')?.addEventListener('click', function() {
+                document.getElementById('upload-page').classList.add('hidden');
+                document.getElementById('profile-page').classList.remove('hidden');
+                
+                // Update tab state
+                tabButtons.forEach(btn => {
+                    btn.classList.remove('text-blue-500', 'tab-active');
+                    btn.classList.add('text-gray-500');
+                });
+                
+                document.querySelector('[data-page="profile-page"]').classList.add('text-blue-500', 'tab-active');
+            });
+            
+            document.getElementById('back-button-downloads')?.addEventListener('click', function() {
+                document.getElementById('downloads-page').classList.add('hidden');
+                document.getElementById('profile-page').classList.remove('hidden');
+                
+                // Update tab state
+                tabButtons.forEach(btn => {
+                    btn.classList.remove('text-blue-500', 'tab-active');
+                    btn.classList.add('text-gray-500');
+                });
+                
+                document.querySelector('[data-page="profile-page"]').classList.add('text-blue-500', 'tab-active');
+            });
+            
+            // Show login/register
+            document.getElementById('show-register')?.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('login-page').classList.add('hidden');
+                document.getElementById('register-page').classList.remove('hidden');
+            });
+            
+            document.getElementById('show-login')?.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('register-page').classList.add('hidden');
+                document.getElementById('login-page').classList.remove('hidden');
+            });
+            
+            // Simulate clicking on a product to show detail page
+            const productCards = document.querySelectorAll('.card-hover');
+            productCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    document.getElementById('home-page').classList.add('hidden');
+                    document.getElementById('product-page').classList.remove('hidden');
+                });
+            });
+            
+            // Simulate clicking on cart icon in header
+            document.querySelector('header button:nth-child(2)').addEventListener('click', function() {
+                // Hide all pages
+                pages.forEach(page => {
+                    page.classList.add('hidden');
+                });
+                
+                // Show cart page
+                document.getElementById('cart-page').classList.remove('hidden');
+                
+                // Update tab state
+                tabButtons.forEach(btn => {
+                    btn.classList.remove('text-blue-500', 'tab-active');
+                    btn.classList.add('text-gray-500');
+                });
+                
+                document.querySelector('[data-page="cart-page"]').classList.add('text-blue-500', 'tab-active');
+            });
+            
+            // Simulate clicking on checkout button
+            document.querySelector('#cart-page button.bg-blue-500')?.addEventListener('click', function() {
+                document.getElementById('cart-page').classList.add('hidden');
+                document.getElementById('checkout-page').classList.remove('hidden');
+            });
+            
+            // Simulate clicking on upload FAB
+            document.getElementById('upload-fab').addEventListener('click', function() {
+                // Hide all pages
+                pages.forEach(page => {
+                    page.classList.add('hidden');
+                });
+                
+                // Show upload page
+                document.getElementById('upload-page').classList.remove('hidden');
+            });
+            
+            // Simulate clicking on downloads in profile
+            document.querySelector('#profile-page .bg-blue-100')?.parentElement.addEventListener('click', function() {
+                document.getElementById('profile-page').classList.add('hidden');
+                document.getElementById('downloads-page').classList.remove('hidden');
+            });
+        });
+        
+        // Countdown timer for new arrivals
+        function startCountdown() {
+            let countdown = 86399; // 23:59:59 in seconds
+            const countdownElement = document.querySelector('.countdown-timer span');
+            
+            const timer = setInterval(function() {
+                const hours = Math.floor(countdown / 3600);
+                const minutes = Math.floor((countdown % 3600) / 60);
+                const seconds = countdown % 60;
+                
+                countdownElement.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (countdown <= 0) {
+                    clearInterval(timer);
+                } else {
+                    countdown--;
+                }
+            }, 1000);
+        }
+        
+        // Start countdown when page loads
+        window.onload = startCountdown;
+    </script>
+</body>
+</html>

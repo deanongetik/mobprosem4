@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Product Detail | CreatorsHub</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f5f5f7;
+      color: #1d1d1f;
+    }
+    .gradient-bg {
+      background: linear-gradient(135deg, #6e8efb, #a777e3);
+    }
+    .creator-gradient {
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    }
+  </style>
+</head>
+<body class="max-w-md mx-auto bg-white min-h-screen relative pb-20">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-10 bg-white bg-opacity-90 backdrop-blur-sm border-b border-gray-100">
+    <div class="px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center space-x-2">
+        <div class="gradient-bg w-8 h-8 rounded-lg flex items-center justify-center">
+          <i class="fas fa-palette text-white text-sm"></i>
+        </div>
+        <h1 class="font-semibold text-lg">CreatorsHub</h1>
+      </div>
+      <div class="flex items-center space-x-4">
+        <button class="text-gray-600">
+          <i class="fas fa-search text-lg"></i>
+        </button>
+        <button class="text-gray-600 relative">
+          <i class="fas fa-shopping-cart text-lg"></i>
+          <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Product Detail Page -->
+  <main class="px-4 py-3">
+    <div class="mb-4">
+      <button onclick="history.back()" class="text-blue-500">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+    </div>
+
+    <div class="bg-gradient-to-r from-blue-100 to-purple-100 rounded-2xl h-64 flex items-center justify-center mb-6 relative">
+      <i class="fas fa-image text-6xl text-blue-500 opacity-70"></i>
+      <div class="absolute bottom-3 left-3 bg-white bg-opacity-90 px-3 py-1 rounded-full flex items-center">
+        <div class="w-5 h-5 rounded-full creator-gradient mr-2"></div>
+        <span class="text-sm font-medium">@designpro</span>
+      </div>
+    </div>
+
+    <div class="mb-6">
+      <div class="flex items-center justify-between mb-2">
+        <h2 class="text-xl font-bold">Minimal UI Kit</h2>
+        <div class="flex items-center">
+          <i class="fas fa-star text-yellow-400 text-sm"></i>
+          <span class="text-gray-700 text-sm ml-1">4.8</span>
+          <span class="text-gray-400 text-sm mx-1">•</span>
+          <span class="text-gray-500 text-sm">128 sales</span>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <span class="text-red-500 font-semibold text-lg">$14.99</span>
+          <span class="text-gray-400 text-sm line-through ml-1">$29.99</span>
+        </div>
+        <div class="bg-blue-500 text-white text-xs px-2 py-1 rounded-full">50% OFF</div>
+      </div>
+
+      <p class="text-gray-600 text-sm mb-4">
+        A complete set of minimalist UI components for your next design project. Includes 100+ customizable elements with light and dark mode support.
+      </p>
+
+      <div class="flex items-center space-x-2 mb-6">
+        <div class="bg-gray-100 px-3 py-1 rounded-full text-xs">
+          <i class="fas fa-tag text-gray-500 mr-1"></i> UI Templates
+        </div>
+        <div class="bg-gray-100 px-3 py-1 rounded-full text-xs">
+          <i class="fas fa-download text-gray-500 mr-1"></i> 2.4MB
+        </div>
+        <div class="bg-gray-100 px-3 py-1 rounded-full text-xs">
+          <i class="fas fa-file-archive text-gray-500 mr-1"></i> ZIP
+        </div>
+      </div>
+
+      <div class="mb-6">
+        <h3 class="font-medium text-sm mb-2">What's included</h3>
+        <ul class="text-sm text-gray-600 space-y-1">
+          <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>100+ UI components</li>
+          <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>Light & Dark variants</li>
+          <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>Figma & Sketch files</li>
+          <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>Lifetime updates</li>
+        </ul>
+      </div>
+
+      <div class="mb-6">
+        <h3 class="font-medium text-sm mb-2">Promo Code</h3>
+        <div class="flex items-center">
+          <input type="text" placeholder="Enter promo code" class="flex-1 border border-gray-200 rounded-l-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500">
+          <button class="bg-blue-500 text-white px-4 py-2 rounded-r-lg text-sm font-medium">Apply</button>
+        </div>
+      </div>
+
+      <button class="w-full bg-blue-500 text-white py-3 rounded-xl font-medium flex items-center justify-center">
+        <i class="fas fa-shopping-cart mr-2"></i>
+        Add to Cart - $14.99
+      </button>
+    </div>
+  </main>
+
+  <!-- Floating Action Button -->
+  <button class="fixed bottom-20 right-4 gradient-bg text-white w-14 h-14 rounded-full flex items-center justify-center">
+    <i class="fas fa-plus text-xl"></i>
+  </button>
+
+  <!-- Footer / Bottom Nav -->
+  <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 flex justify-around py-2 px-4">
+    <button class="py-2 px-4 flex flex-col items-center text-gray-500">
+      <i class="fas fa-home text-lg mb-1"></i>
+      <span class="text-xs">Home</span>
+    </button>
+    <button class="py-2 px-4 flex flex-col items-center text-blue-500">
+      <i class="fas fa-search text-lg mb-1"></i>
+      <span class="text-xs">Browse</span>
+    </button>
+    <button class="py-2 px-4 flex flex-col items-center text-gray-500">
+      <i class="fas fa-shopping-cart text-lg mb-1"></i>
+      <span class="text-xs">Cart</span>
+    </button>
+    <button class="py-2 px-4 flex flex-col items-center text-gray-500">
+      <i class="fas fa-user text-lg mb-1"></i>
+      <span class="text-xs">Profile</span>
+    </button>
+  </nav>
+</body>
+</html>
