@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DigiSphere | Digital Asset Marketplace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #f5f5f7;
+            color: #1d1d1f;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .app-container {
+            max-width: 480px; 
+            margin: 0 auto;
+            background-color: #ffffff;
+            min-height: 100vh;
+            position: relative;
+            padding-bottom: 90px; 
+            overflow-x: hidden; 
+        }
+        .page-content {
+            padding-left: 1rem; 
+            padding-right: 1rem; 
+            padding-top: 0.75rem; 
+            padding-bottom: 0.75rem; 
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+        }
+        .creator-gradient {
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+        .countdown-timer {
+            font-feature-settings: "tnum";
+            font-variant-numeric: tabular-nums;
+        }
+        .tab-active { 
+            position: relative;
+            color: #0071e3;
+        }
+        .tab-active:after { 
+            content: '';
+            position: absolute;
+            bottom: -8px; 
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px; 
+            height: 3px;
+            background-color: #0071e3;
+            border-radius: 3px;
+        }
+        .floating-action-btn {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+        .horizontal-scroll::-webkit-scrollbar {
+            height: 4px;
+        }
+        .horizontal-scroll::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 10px;
+        }
+        .horizontal-scroll::-webkit-scrollbar-track {
+            background-color: #f1f5f9;
+        }
+        .shadow-top {
+            box-shadow: 0 -4px 10px -1px rgba(0, 0, 0, 0.05);
+        }
+        .image-placeholder-icon {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .file-upload { 
+            border: 2px dashed #d1d5db;
+            transition: all 0.3s ease;
+        }
+        .file-upload:hover {
+            border-color: #a777e3;
+            background-color: #f9fafb;
+        }
+        .progress-bar { 
+            height: 6px;
+            background-color: #e5e7eb;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .progress-fill { 
+            height: 100%;
+            background: linear-gradient(90deg, #6e8efb, #a777e3);
+            transition: width 0.3s ease;
+        }
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .modal-content {
+            background-color: white;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 1rem; 
+            padding: 1.5rem; 
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+        .modal-tab-content { display: none; }
+        .modal-tab-content.active { display: block; }
+
+        .page-container > div:not(.active) {
+            display: none !important;
+        }
+        .page-container > div.active {
+            display: block !important;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <header class="sticky top-0 z-20 bg-white bg-opacity-95 backdrop-blur-md border-b border-gray-100">
+            <div class="px-4 py-3 flex items-center justify-between">
+                <a href="#" onclick="navigateTo('home-page', event)" class="flex items-center space-x-2">
+                    <div class="gradient-bg w-8 h-8 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-globe text-white text-sm"></i>
+                    </div>
+                    <h1 class="font-semibold text-lg">DigiSphere</h1>
+                </a>
+                <div class="flex items-center space-x-4">
+                    <button onclick="navigateTo('browse-page', null, 'all_assets')" class="text-gray-600 hover:text-blue-500">
+                        <i class="fas fa-search text-lg"></i>
+                    </button>
+                    <button onclick="navigateTo('cart-page')" class="text-gray-600 hover:text-blue-500 relative">
+                        <i class="fas fa-shopping-cart text-lg"></i>
+                        <span id="cart-badge-header" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center">0</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main id="app-content" class="page-container">
+            <div id="home-page" class="page-content active">
+                <section class="gradient-bg rounded-2xl p-6 text-white mb-6 shadow-lg">
+                    <h2 class="text-2xl font-bold mb-2">Sell & Discover Digital Assets</h2>
+                    <p class="text-white text-opacity-90 mb-4 text-sm">Join our community of 10,000+ creators</p>
+                    <button onclick="navigateToCreatorAuth('Start Selling')" class="bg-white text-purple-600 font-medium px-4 py-2 rounded-full text-sm hover:bg-gray-100 transition duration-300">Start Selling</button>
+                </section>
+                
+                <section class="mb-8">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-semibold text-lg">Browse Categories</h3>
+                        <button onclick="navigateTo('browse-page', null, 'all_categories')" class="text-blue-500 text-sm font-medium hover:text-blue-700">See all</button>
+                    </div>
+                    <div class="grid grid-cols-4 gap-3">
+                        <a href="#" onclick="navigateTo('browse-page', event, 'graphics')" class="bg-gray-50 rounded-xl p-3 flex flex-col items-center hover:bg-gray-100 transition duration-300 card-hover">
+                            <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-2"><i class="fas fa-image text-blue-500"></i></div>
+                            <span class="text-xs font-medium text-center">Graphics</span>
+                        </a>
+                        <a href="#" onclick="navigateTo('browse-page', event, 'music')" class="bg-gray-50 rounded-xl p-3 flex flex-col items-center hover:bg-gray-100 transition duration-300 card-hover">
+                            <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mb-2"><i class="fas fa-music text-purple-500"></i></div>
+                            <span class="text-xs font-medium text-center">Music</span>
+                        </a>
+                        <a href="#" onclick="navigateTo('browse-page', event, 'videos')" class="bg-gray-50 rounded-xl p-3 flex flex-col items-center hover:bg-gray-100 transition duration-300 card-hover">
+                            <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mb-2"><i class="fas fa-video text-green-500"></i></div>
+                            <span class="text-xs font-medium text-center">Videos</span>
+                        </a>
+                        <a href="#" onclick="navigateTo('browse-page', event, 'templates')" class="bg-gray-50 rounded-xl p-3 flex flex-col items-center hover:bg-gray-100 transition duration-300 card-hover">
+                            <div class="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center mb-2"><i class="fas fa-file-code text-yellow-600"></i></div>
+                            <span class="text-xs font-medium text-center">Templates</span>
+                        </a>
+                    </div>
+                </section>
+                
+                <section class="mb-8">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h3 class="font-semibold text-lg">New Arrivals</h3>
+                            <p class="text-xs text-gray-500">Limited time offer</p>
+                        </div>
+                        <div class="bg-gray-100 px-3 py-1 rounded-full flex items-center countdown-timer">
+                            <i class="fas fa-clock text-gray-500 mr-2 text-sm"></i>
+                            <span id="countdown-display" class="font-medium text-sm text-gray-700">23:59:59</span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-white border border-gray-100 rounded-xl overflow-hidden card-hover shadow-sm product-card" data-product-id="1">
+                            <div class="h-32 bg-gradient-to-r from-blue-100 to-purple-100 flex items-center justify-center relative product-image-container">
+                                <img src="https://placehold.co/300x200/E0E7FF/4F46E5?text=Minimal+UI+Kit" alt="Minimal UI Kit" class="w-full h-full object-cover" 
+                                     onerror="this.style.display='none'; this.parentElement.innerHTML = '<div class=\'image-placeholder-icon\'><i class=\'fas fa-image text-3xl text-blue-500 opacity-70\'></i></div>';">
+                                <div class="absolute bottom-2 left-2 bg-white bg-opacity-90 px-2 py-1 rounded-full flex items-center text-xs shadow">
+                                    <img src="https://placehold.co/20x20/FF9A9E/FFFFFF?text=DP" alt="Creator Avatar" class="w-4 h-4 rounded-full creator-gradient mr-1.5 object-cover"
+                                         onerror="this.style.display='none'; this.outerHTML = '<div class=\'w-4 h-4 rounded-full creator-gradient mr-1.5 flex items-center justify-center\'><i class=\'fas fa-user text-white text-[8px]\'></i></div>';">
+                                    <span class="font-medium text-gray-700">@designpro</span>
+                                </div>
+                            </div>
+                            <div class="p-3">
+                                <h4 class="font-medium text-sm mb-1 truncate">Minimal UI Kit</h4>
+                                <div class="flex items-center justify-between">
+                                    <div><span class="text-red-500 font-semibold text-sm">$14.99</span><span class="text-gray-400 text-xs line-through ml-1">$29.99</span></div>
+                                    <button onclick="addToCart(1, 'Minimal UI Kit', 14.99, event)" class="text-blue-500 hover:text-blue-700 p-1 rounded-full hover:bg-blue-100 transition-colors"><i class="fas fa-plus-circle text-lg"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white border border-gray-100 rounded-xl overflow-hidden card-hover shadow-sm product-card" data-product-id="2">
+                            <div class="h-32 bg-gradient-to-r from-green-100 to-teal-100 flex items-center justify-center relative product-image-container">
+                                 <img src="https://placehold.co/300x200/D1FAE5/059669?text=Ambient+Sounds" alt="Ambient Sounds" class="w-full h-full object-cover"
+                                      onerror="this.style.display='none'; this.parentElement.innerHTML = '<div class=\'image-placeholder-icon\'><i class=\'fas fa-headphones text-3xl text-green-500 opacity-70\'></i></div>';">
+                                <div class="absolute bottom-2 left-2 bg-white bg-opacity-90 px-2 py-1 rounded-full flex items-center text-xs shadow">
+                                     <img src="https://placehold.co/20x20/FBCFE8/FFFFFF?text=SW" alt="Creator Avatar" class="w-4 h-4 rounded-full bg-pink-200 mr-1.5 object-cover"
+                                          onerror="this.style.display='none'; this.outerHTML = '<div class=\'w-4 h-4 rounded-full bg-pink-200 mr-1.5 flex items-center justify-center\'><i class=\'fas fa-user text-pink-700 text-[8px]\'></i></div>';">
+                                    <span class="font-medium text-gray-700">@soundwaves</span>
+                                </div>
+                            </div>
+                            <div class="p-3">
+                                <h4 class="font-medium text-sm mb-1 truncate">Ambient Sounds</h4>
+                                <div class="flex items-center justify-between">
+                                    <div><span class="text-red-500 font-semibold text-sm">$9.99</span><span class="text-gray-400 text-xs line-through ml-1">$19.99</span></div>
+                                    <button onclick="addToCart(2, 'Ambient Sounds', 9.99, event)" class="text-blue-500 hover:text-blue-700 p-1 rounded-full hover:bg-blue-100 transition-colors"><i class="fas fa-plus-circle text-lg"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="mb-8">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-semibold text-lg">Top Creators</h3>
+                        <button onclick="navigateTo('browse-page', null, 'all_creators')" class="text-blue-500 text-sm font-medium hover:text-blue-700">See all</button>
+                    </div>
+                    <div class="flex space-x-4 overflow-x-auto pb-2 horizontal-scroll">
+                        <a href="#" onclick="navigateToCreatorProfilePage('@designpro', event)" class="flex flex-col items-center min-w-[70px] card-hover">
+                            <div class="w-16 h-16 rounded-full creator-gradient flex items-center justify-center mb-2 shadow-sm overflow-hidden">
+                                <img src="https://placehold.co/64x64/FF9A9E/FFFFFF?text=DP" alt="DesignPro Avatar" class="w-full h-full object-cover border-2 border-white"
+                                     onerror="this.style.display='none'; this.parentElement.innerHTML = '<div class=\'image-placeholder-icon\'><i class=\'fas fa-user text-2xl text-white opacity-90\'></i></div>';">
+                            </div>
+                            <span class="text-xs font-medium text-gray-700">@designpro</span>
+                        </a>
+                        <a href="#" onclick="navigateToCreatorProfilePage('@devtools', event)" class="flex flex-col items-center min-w-[70px] card-hover">
+                            <div class="w-16 h-16 rounded-full bg-gradient-to-r from-blue-200 to-cyan-200 flex items-center justify-center mb-2 shadow-sm overflow-hidden">
+                                 <img src="https://placehold.co/64x64/A5F3FC/0E7490?text=DT" alt="DevTools Avatar" class="w-full h-full object-cover border-2 border-white"
+                                      onerror="this.style.display='none'; this.parentElement.innerHTML = '<div class=\'image-placeholder-icon\'><i class=\'fas fa-user text-2xl text-blue-700 opacity-90\'></i></div>';">
+                            </div>
+                            <span class="text-xs font-medium text-gray-700">@devtools</span>
+                        </a>
+                         <a href="#" onclick="navigateToCreatorProfilePage('@soundwaves', event)" class="flex flex-col items-center min-w-[70px] card-hover">
+                            <div class="w-16 h-16 rounded-full bg-gradient-to-r from-purple-200 to-pink-200 flex items-center justify-center mb-2 shadow-sm overflow-hidden">
+                                <img src="https://placehold.co/64x64/FBCFE8/86198F?text=SW" alt="SoundWaves Avatar" class="w-full h-full object-cover border-2 border-white"
+                                     onerror="this.style.display='none'; this.parentElement.innerHTML = '<div class=\'image-placeholder-icon\'><i class=\'fas fa-user text-2xl text-purple-700 opacity-90\'></i></div>';">
+                            </div>
+                            <span class="text-xs font-medium text-gray-700">@soundwaves</span>
+                        </a>
+                    </div>
+                </section>
+                
+                <section>
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-semibold text-lg">Featured Products</h3>
+                        <button onclick="navigateTo('browse-page', null, 'featured_products')" class="text-blue-500 text-sm font-medium hover:text-blue-700">See all</button>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="bg-white border border-gray-100 rounded-xl p-3 flex items-center card-hover shadow-sm product-card" data-product-id="3">
+                            <div class="w-16 h-16 bg-gradient-to-r from-purple-100 to-pink-100 rounded-lg flex items-center justify-center mr-3 overflow-hidden product-image-container-sm">
+                                <img src="https://placehold.co/80x80/F5D0FE/A21CAF?text=Social" alt="Social Media Pack" class="w-full h-full object-cover"
+                                     onerror="this.style.display='none'; this.parentElement.innerHTML = '<div class=\'image-placeholder-icon\'><i class=\'fas fa-photo-film text-xl text-purple-500\'></i></div>';">
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-medium text-sm mb-0.5 truncate">Social Media Pack</h4>
+                                <p class="text-gray-500 text-xs mb-1">50 templates by <span class="text-gray-600 font-medium">@designpro</span></p>
+                                 <div class="flex items-center text-xs"><i class="fas fa-star text-yellow-400 mr-1"></i><span class="text-gray-600 font-medium">4.8</span><span class="text-gray-400 mx-1.5">•</span><span class="text-gray-500">200+ sales</span></div>
+                            </div>
+                            <div class="text-right ml-2"><span class="font-semibold text-sm text-gray-800">$24.99</span></div>
+                        </div>
+                         <div class="bg-white border border-gray-100 rounded-xl p-3 flex items-center card-hover shadow-sm product-card" data-product-id="4">
+                            <div class="w-16 h-16 bg-gradient-to-r from-blue-100 to-cyan-100 rounded-lg flex items-center justify-center mr-3 overflow-hidden product-image-container-sm">
+                                 <img src="https://placehold.co/80x80/CFEAFE/0369A1?text=Portfolio" alt="Portfolio Template" class="w-full h-full object-cover"
+                                      onerror="this.style.display='none'; this.parentElement.innerHTML = '<div class=\'image-placeholder-icon\'><i class=\'fas fa-file-code text-xl text-blue-500\'></i></div>';">
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-medium text-sm mb-0.5 truncate">Portfolio Template</h4>
+                                <p class="text-gray-500 text-xs mb-1">HTML/CSS by <span class="text-gray-600 font-medium">@devtools</span></p>
+                                 <div class="flex items-center text-xs"><i class="fas fa-star text-yellow-400 mr-1"></i><span class="text-gray-600 font-medium">4.9</span><span class="text-gray-400 mx-1.5">•</span><span class="text-gray-500">150+ sales</span></div>
+                            </div>
+                            <div class="text-right ml-2"><span class="font-semibold text-sm text-gray-800">$19.99</span></div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div id="product-detail-page" class="page-content hidden">
+                <div class="mb-4">
+                    <button onclick="goBack()" class="text-blue-500 hover:text-blue-700 flex items-center">
+                        <i class="fas fa-arrow-left text-lg mr-2"></i> Back
+                    </button>
+                </div>
+                <div id="product-detail-content-area">
+                    <p class="text-center text-gray-500">Loading product details...</p>
+                </div>
+            </div>
+
+            <div id="browse-page" class="page-content hidden">
+                <div class="flex items-center justify-between mb-4">
+                    <button onclick="goBack()" class="text-blue-500 hover:text-blue-700 flex items-center">
+                        <i class="fas fa-arrow-left text-lg mr-2"></i> Back
+                    </button>
+                    <h2 class="text-xl font-bold" id="browse-page-title">Browse Assets</h2>
+                    <button class="text-gray-600 hover:text-blue-500" onclick="alert('Filter options would show here (Not implemented yet)')">
+                        <i class="fas fa-sliders-h text-lg"></i>
+                    </button>
+                </div>
+                <div class="relative mb-4">
+                    <input type="text" id="browse-search-input" placeholder="Search within results..." 
+                           class="w-full bg-gray-50 border-gray-200 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500">
+                    <i class="fas fa-search absolute left-3 top-3.5 text-gray-400"></i>
+                </div>
+                <p id="browse-filter-info" class="text-sm text-gray-600 mb-4">Showing results for: <span class="font-medium">All Assets</span></p>
+                <div id="browse-grid" class="grid grid-cols-2 gap-3">
+                    <p class="col-span-2 text-center text-gray-500">Loading products...</p>
+                </div>
+            </div>
+
+            <div id="cart-page" class="page-content hidden">
+                <div class="flex items-center justify-between mb-6">
+                    <button onclick="goBack()" class="text-blue-500 hover:text-blue-700 flex items-center"><i class="fas fa-arrow-left text-lg mr-2"></i> Back</button>
+                    <h2 class="text-xl font-bold">Your Cart</h2>
+                    <div class="w-12"></div> 
+                </div>
+                <div id="cart-items-container" class="space-y-4 mb-6">
+                    <p class="text-gray-500 text-center">Your cart is empty.</p>
+                </div>
+                <div id="cart-summary" class="bg-gray-50 rounded-xl p-4 mb-6 hidden">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-gray-600">Subtotal</span>
+                        <span id="cart-subtotal" class="font-medium">$0.00</span>
+                    </div>
+                    <div class="border-t border-gray-200 pt-3 mt-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-600 font-semibold">Total</span>
+                            <span id="cart-total" class="font-bold text-lg">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+                <button id="checkout-button" onclick="navigateToCheckout()" class="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition duration-300 shadow-md hidden">
+                    Proceed to Checkout
+                </button>
+            </div>
+
+            <div id="checkout-page" class="page-content hidden">
+                 <div class="flex items-center justify-between mb-6">
+                    <button onclick="goBack()" class="text-blue-500 hover:text-blue-700 flex items-center"><i class="fas fa-arrow-left text-lg mr-2"></i> Back to Cart</button>
+                    <h2 class="text-xl font-bold">Checkout</h2>
+                    <div class="w-24"></div> 
+                </div>
+                <div id="checkout-summary" class="bg-gray-50 rounded-xl p-4 mb-6">
+                    <h3 class="font-semibold text-lg mb-3">Order Summary</h3>
+                    <div id="checkout-items-list" class="space-y-2 mb-3"></div>
+                    <div class="border-t border-gray-200 pt-3 mt-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-600 font-semibold">Total to Pay</span>
+                            <span id="checkout-total" class="font-bold text-lg">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+                <h3 class="font-semibold text-lg mb-3">Payment Method</h3>
+                <div class="space-y-2 mb-6">
+                    <label class="flex items-center bg-gray-100 p-3 rounded-lg hover:bg-gray-200 cursor-pointer">
+                        <input type="radio" name="payment-method" value="credit-card" class="form-radio h-5 w-5 text-blue-600" checked>
+                        <span class="ml-3 text-gray-700">Credit Card</span>
+                        <i class="fas fa-credit-card ml-auto text-gray-500"></i>
+                    </label>
+                    <label class="flex items-center bg-gray-100 p-3 rounded-lg hover:bg-gray-200 cursor-pointer">
+                        <input type="radio" name="payment-method" value="paypal" class="form-radio h-5 w-5 text-blue-600">
+                        <span class="ml-3 text-gray-700">PayPal</span>
+                        <i class="fab fa-paypal ml-auto text-gray-500"></i>
+                    </label>
+                </div>
+                <button onclick="processPayment()" class="w-full bg-green-500 text-white py-3 rounded-xl font-medium hover:bg-green-600 transition duration-300">Pay Now (Simulated)</button>
+            </div>
+
+            <div id="profile-page" class="page-content hidden">
+                <p class="text-center text-gray-500">Loading profile...</p>
+            </div>
+
+            <div id="upload-page" class="page-content hidden">
+                <div class="flex items-center justify-between mb-6">
+                    <button onclick="goBack()" class="text-blue-500 hover:text-blue-700 flex items-center"><i class="fas fa-arrow-left text-lg mr-2"></i> Back</button>
+                    <h2 class="text-xl font-bold">Upload New Asset</h2>
+                    <div class="w-12"></div>
+                </div>
+                <form id="upload-asset-form" class="space-y-4">
+                    <div><label for="asset-title" class="block text-sm font-medium mb-1">Asset Title</label><input type="text" id="asset-title" placeholder="e.g. Minimal UI Kit" required class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-1 focus:ring-blue-500"></div>
+                    <div><label for="asset-description" class="block text-sm font-medium mb-1">Description</label><textarea id="asset-description" placeholder="Describe your asset..." required class="w-full border border-gray-300 rounded-xl px-4 py-2.5 h-28 focus:outline-none focus:ring-1 focus:ring-blue-500"></textarea></div>
+                    <div><label for="asset-category" class="block text-sm font-medium mb-1">Category</label><select id="asset-category" required class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-1 focus:ring-blue-500 bg-white"><option value="">Select category</option><option value="Graphics">Graphics</option><option value="Music">Music</option><option value="Videos">Videos</option><option value="Templates">Templates</option></select></div>
+                    <div><label for="asset-price" class="block text-sm font-medium mb-1">Price</label><div class="flex items-center"><span class="mr-2 text-gray-500">$</span><input type="number" id="asset-price" placeholder="0.00" step="0.01" min="0" required class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-1 focus:ring-blue-500"></div></div>
+                    <div><label class="block text-sm font-medium mb-1">Preview Image (URL)</label><input type="url" id="asset-preview-image" placeholder="https://example.com/image.jpg" required class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-1 focus:ring-blue-500"></div>
+                    <div><label class="block text-sm font-medium mb-1">Asset File (ZIP URL)</label><input type="url" id="asset-file-url" placeholder="https://example.com/asset.zip" required class="w-full border border-gray-300 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-1 focus:ring-blue-500"></div>
+                    <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700">Publish Asset</button>
+                </form>
+            </div>
+            
+            <div id="creator-profile-page" class="page-content hidden">
+                <div class="mb-4">
+                     <button onclick="goBack()" class="text-blue-500 hover:text-blue-700 flex items-center"><i class="fas fa-arrow-left text-lg mr-2"></i> Back</button>
+                </div>
+                <div id="creator-profile-content-area">
+                    <p class="text-center text-gray-500">Loading creator profile...</p>
+                </div>
+            </div>
+
+            <div id="downloads-page" class="page-content hidden"><div class="flex items-center justify-between mb-4"><button onclick="goBack()" class="text-blue-500 flex items-center"><i class="fas fa-arrow-left mr-2"></i> Back to Profile</button><h2 class="text-xl font-bold">My Downloads</h2><div class="w-20"></div></div><p class="text-gray-600">List of downloaded items will appear here.</p></div>
+            <div id="purchase-history-page" class="page-content hidden"><div class="flex items-center justify-between mb-4"><button onclick="goBack()" class="text-blue-500 flex items-center"><i class="fas fa-arrow-left mr-2"></i> Back to Profile</button><h2 class="text-xl font-bold">Purchase History</h2><div class="w-20"></div></div><p class="text-gray-600">Your past purchases will be listed here.</p></div>
+            <div id="wishlist-page" class="page-content hidden"><div class="flex items-center justify-between mb-4"><button onclick="goBack()" class="text-blue-500 flex items-center"><i class="fas fa-arrow-left mr-2"></i> Back to Profile</button><h2 class="text-xl font-bold">My Wishlist</h2><div class="w-20"></div></div><p class="text-gray-600">Items you've wishlisted will show up here.</p></div>
+            <div id="my-uploads-page" class="page-content hidden"><div class="flex items-center justify-between mb-4"><button onclick="goBack()" class="text-blue-500 flex items-center"><i class="fas fa-arrow-left mr-2"></i> Back to Profile</button><h2 class="text-xl font-bold">My Uploads</h2><div class="w-20"></div></div><p class="text-gray-600">As a creator, your uploaded assets and management options will be here.</p></div>
+            <div id="settings-page" class="page-content hidden"><div class="flex items-center justify-between mb-4"><button onclick="goBack()" class="text-blue-500 flex items-center"><i class="fas fa-arrow-left mr-2"></i> Back to Profile</button><h2 class="text-xl font-bold">Settings</h2><div class="w-20"></div></div><p class="text-gray-600">Account settings and preferences will be available here.</p></div>
+
+        </main>
+
+        <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex justify-around py-2 px-1 shadow-top z-10 mx-auto max-w-[480px]">
+            <button class="tab-button py-2 px-4 flex flex-col items-center text-blue-500 tab-active" data-page="home-page">
+                <i class="fas fa-home text-lg mb-1"></i><span class="text-xs font-medium">Home</span>
+            </button>
+            <button class="tab-button py-2 px-4 flex flex-col items-center text-gray-500 hover:text-blue-500" data-page="browse-page">
+                <i class="fas fa-search text-lg mb-1"></i><span class="text-xs font-medium">Browse</span>
+            </button>
+            <button class="tab-button py-2 px-4 flex flex-col items-center text-gray-500 hover:text-blue-500" data-page="cart-page">
+                <div class="relative"><i class="fas fa-shopping-cart text-lg mb-1"></i><span id="cart-badge-nav" class="absolute -top-1 -right-3 bg-red-500 text-white text-[10px] font-semibold rounded-full w-4 h-4 flex items-center justify-center">0</span></div>
+                <span class="text-xs font-medium">Cart</span>
+            </button>
+            <button class="tab-button py-2 px-4 flex flex-col items-center text-gray-500 hover:text-blue-500" data-page="profile-page">
+                <i class="fas fa-user text-lg mb-1"></i><span class="text-xs font-medium">Profile</span>
+            </button>
+        </nav>
+
+        <button onclick="navigateToUploadPageForCreator()" id="upload-fab" class="fixed bottom-20 right-4 gradient-bg text-white w-14 h-14 rounded-full flex items-center justify-center floating-action-btn shadow-lg hover:opacity-90 transition duration-300 z-10">
+            <i class="fas fa-plus text-xl"></i>
+        </button>
+
+        <div id="toast-notification" class="fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-6 py-3 rounded-lg shadow-lg opacity-0 transition-opacity duration-300 z-50 text-sm">
+            Item message here
+        </div>
+
+        <div id="auth-modal" class="modal">
+            <div class="modal-content">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold" id="auth-modal-title">Log In</h2>
+                    <button onclick="closeAuthModal()" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times"></i></button>
+                </div>
+
+                <div id="login-form-container" class="modal-tab-content active">
+                    <form id="login-form" class="space-y-4">
+                        <div><label for="login-email" class="block text-sm font-medium text-gray-700">Email</label><input type="email" id="login-email" autocomplete="email" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"></div>
+                        <div><label for="login-password" class="block text-sm font-medium text-gray-700">Password</label><input type="password" id="login-password" autocomplete="current-password" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"></div>
+                        <input type="hidden" id="login-role-flag" value="user"> 
+                        <button type="submit" class="w-full gradient-bg text-white py-2.5 px-4 rounded-lg font-medium hover:opacity-90">Log In</button>
+                    </form>
+                    <p class="mt-4 text-center text-sm">Don't have an account? <span onclick="switchAuthForm('register')" class="font-medium text-blue-600 hover:text-blue-500 cursor-pointer">Sign Up</span></p>
+                    <p class="mt-2 text-center text-sm" id="login-as-creator-cta-container">Are you a Creator? <span onclick="setLoginMode('creator')" class="font-medium text-purple-600 hover:text-purple-500 cursor-pointer">Log In as Creator</span></p>
+                </div>
+
+                <div id="register-form-container" class="modal-tab-content">
+                    <form id="register-form" class="space-y-4">
+                        <div><label for="register-name" class="block text-sm font-medium text-gray-700">Full Name</label><input type="text" id="register-name" autocomplete="name" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"></div>
+                        <div><label for="register-email" class="block text-sm font-medium text-gray-700">Email</label><input type="email" id="register-email" autocomplete="email" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"></div>
+                        <div><label for="register-password" class="block text-sm font-medium text-gray-700">Password</label><input type="password" id="register-password" autocomplete="new-password" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"></div>
+                        <input type="hidden" id="register-role-flag" value="user">
+                        
+                        <div class="space-y-2 pt-2">
+                            <div class="flex items-start">
+                                <input id="register-tnc" name="tnc" type="checkbox" required class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 mt-0.5">
+                                <label for="register-tnc" class="ml-2 block text-sm text-gray-700">I agree to the <a href="#" onclick="alert('Show T&C Page (Not Implemented)'); event.preventDefault();" class="font-medium text-blue-600 hover:underline">Terms and Conditions</a> and <a href="#" onclick="alert('Show Privacy Policy Page (Not Implemented)'); event.preventDefault();" class="font-medium text-blue-600 hover:underline">Privacy Policy</a>.</label>
+                            </div>
+                            <div class="flex items-start">
+                                <input id="register-promo" name="promo" type="checkbox" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 mt-0.5">
+                                <label for="register-promo" class="ml-2 block text-sm text-gray-700">Receive promotional emails and updates (optional).</label>
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full gradient-bg text-white py-2.5 px-4 rounded-lg font-medium hover:opacity-90">Sign Up</button>
+                    </form>
+                    <p class="mt-4 text-center text-sm">Already have an account? <span onclick="switchAuthForm('login')" class="font-medium text-blue-600 hover:text-blue-500 cursor-pointer">Log In</span></p>
+                    <p class="mt-2 text-center text-sm" id="register-as-creator-cta-container">Want to sell your assets? <span onclick="setRegisterMode('creator')" class="font-medium text-purple-600 hover:text-purple-500 cursor-pointer">Sign Up as a Creator</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Global State & Data (Simulated) ---
+        let currentUser = null; 
+        let cartItems = []; 
+        const productsData = { 
+            1: { id: 1, name: "Minimal UI Kit", price: 14.99, originalPrice: 29.99, creator: "@designpro", rating: 4.8, sales: 250, category: "Graphics", description: "A complete set of minimalist UI components...", images: ["https://placehold.co/600x400/E0E7FF/4F46E5?text=Minimal+UI+Kit+1", "https://placehold.co/300x200/EBF4FF/4F46E5?text=Thumb+2"], details: { included: ["100+ UI components", "Light & Dark variants"], fileTypes: "Figma, Sketch", fileSize: "24.5 MB", compatibility: "Figma, Sketch App", lastUpdated: "May 20, 2024"} },
+            2: { id: 2, name: "Ambient Sounds Pack", price: 9.99, originalPrice: 19.99, creator: "@soundwaves", rating: 4.9, sales: 180, category: "Music", description: "High-quality ambient soundscapes...", images: ["https://placehold.co/600x400/D1FAE5/059669?text=Ambient+Sounds+1"], details: { included: ["50+ WAV files", "Loopable"], fileTypes: "WAV, MP3", fileSize: "150.2 MB", compatibility: "Any audio editor", lastUpdated: "April 15, 2024"} },
+            3: { id: 3, name: "Social Media Pack", price: 24.99, creator: "@designpro", rating: 4.8, sales: 200, category: "Graphics", description: "50 premium templates for social media...", images: ["https://placehold.co/600x400/F5D0FE/A21CAF?text=Social+Pack+Main"], details: { included: ["50 Templates (PSD)", "Instagram, Facebook sizes"], fileTypes: "PSD, JPG", fileSize: "80MB", compatibility: "Photoshop CC", lastUpdated: "May 01, 2024"} },
+            4: { id: 4, name: "Portfolio Website Template", price: 19.99, creator: "@devtools", rating: 4.9, sales: 150, category: "Templates", description: "Modern HTML/CSS portfolio template...", images: ["https://placehold.co/600x400/CFEAFE/0369A1?text=Portfolio+Web+Main"], details: { included: ["HTML, CSS, JS files", "Responsive Design"], fileTypes: "HTML, CSS, JS", fileSize: "5.2MB", compatibility: "All modern browsers", lastUpdated: "March 10, 2024"} },
+        };
+        const creatorsData = {
+            "@designpro": { username: "@designpro", name: "Design Pro", avatar: "https://placehold.co/80x80/FF9A9E/FFFFFF?text=DP", bio: "Crafting beautiful digital experiences.", products: [1, 3], followers: 1250, memberSince: "Jan 2022" },
+            "@soundwaves": { username: "@soundwaves", name: "Sound Waves", avatar: "https://placehold.co/80x80/FBCFE8/FFFFFF?text=SW", bio: "Immersive soundscapes and music.", products: [2], followers: 850, memberSince: "Mar 2022" },
+            "@devtools": { username: "@devtools", name: "Dev Tools", avatar: "https://placehold.co/80x80/A5F3FC/0E7490?text=DT", bio: "Functional web templates.", products: [4], followers: 980, memberSince: "Feb 2023" },
+        };
+
+        let pageHistory = ['home-page']; 
+        let currentAuthRole = 'user'; // 'user' or 'creator' for the modal
+
+        const appContent = document.getElementById('app-content');
+        const allPages = appContent.querySelectorAll('.page-content');
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const cartBadgeHeader = document.getElementById('cart-badge-header');
+        const cartBadgeNav = document.getElementById('cart-badge-nav');
+        const toastNotification = document.getElementById('toast-notification');
+        const authModal = document.getElementById('auth-modal');
+        const authModalTitle = document.getElementById('auth-modal-title');
+        const loginFormContainer = document.getElementById('login-form-container');
+        const registerFormContainer = document.getElementById('register-form-container');
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const loginRoleFlagInput = document.getElementById('login-role-flag'); 
+        const registerRoleFlagInput = document.getElementById('register-role-flag'); 
+        const loginAsCreatorCtaContainer = document.getElementById('login-as-creator-cta-container');
+        const registerAsCreatorCtaContainer = document.getElementById('register-as-creator-cta-container');
+
+
+        function navigateTo(pageId, event, param = null) {
+            if (event) event.preventDefault();
+            
+            if (pageHistory[pageHistory.length -1] !== pageId) {
+                 pageHistory.push(pageId);
+            }
+
+            allPages.forEach(page => page.classList.remove('active'));
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+                tabButtons.forEach(btn => {
+                    btn.classList.remove('text-blue-500', 'tab-active');
+                    btn.classList.add('text-gray-500');
+                    let mainPageForTab = pageId.split('-')[0]; 
+                    if(pageId === 'product-detail-page' || pageId === 'creator-profile-page') mainPageForTab = 'browse-page';
+
+                    if (btn.dataset.page === pageId || btn.dataset.page === mainPageForTab) {
+                        btn.classList.add('text-blue-500', 'tab-active');
+                        btn.classList.remove('text-gray-500');
+                    }
+                });
+            } else {
+                console.error("Page not found:", pageId, "Navigating to home.");
+                pageHistory = ['home-page']; 
+                navigateTo('home-page'); 
+                return;
+            }
+            
+            if (pageId === 'browse-page') loadBrowsePage(param);
+            else if (pageId === 'product-detail-page' && param) loadProductDetailPage(param);
+            else if (pageId === 'creator-profile-page' && param) loadCreatorProfilePage(param);
+            else if (pageId === 'profile-page') loadProfilePage();
+            else if (pageId === 'cart-page') loadCartPage();
+            else if (pageId === 'checkout-page') loadCheckoutPage();
+
+            window.scrollTo(0,0);
+        }
+
+        function goBack() {
+            if (pageHistory.length > 1) {
+                pageHistory.pop(); 
+                const previousPageId = pageHistory[pageHistory.length - 1];
+                navigateTo(previousPageId, null, null); 
+            } else {
+                navigateTo('home-page'); 
+            }
+        }
+        
+        function loadProductDetailPage(productId) {
+            const product = productsData[productId];
+            const contentArea = document.getElementById('product-detail-content-area');
+            if (!product) {
+                contentArea.innerHTML = `<p class="text-red-500 text-center py-10">Product not found.</p>`;
+                return;
+            }
+            let imageGalleryHtml = '';
+            if (product.images && product.images.length > 0) {
+                imageGalleryHtml = `
+                    <div class="bg-gray-100 rounded-2xl h-64 md:h-80 flex items-center justify-center mb-3 overflow-hidden shadow relative">
+                        <img id="main-product-image" src="${product.images[0]}" alt="${product.name} main image" class="w-full h-full object-cover">
+                    </div>
+                    ${product.images.length > 1 ? `
+                    <div class="grid grid-cols-4 gap-2 mb-4">
+                        ${product.images.map((imgSrc, index) => `
+                            <img src="${imgSrc}" alt="${product.name} thumbnail ${index + 1}" 
+                                 class="w-full h-16 object-cover rounded-lg border-2 ${index === 0 ? 'border-blue-500' : 'border-transparent'} hover:border-blue-500 cursor-pointer product-thumbnail"
+                                 onclick="changeMainProductImage('${imgSrc}', this)">
+                        `).join('')}
+                    </div>` : ''}
+                `;
+            } else {
+                imageGalleryHtml = `<div class="bg-gray-100 rounded-2xl h-64 flex items-center justify-center mb-6 relative image-placeholder-icon"><i class="fas fa-image text-6xl text-gray-400 opacity-70"></i></div>`;
+            }
+            contentArea.innerHTML = `
+                ${imageGalleryHtml}
+                <div class="flex items-start justify-between mb-1">
+                    <h2 class="text-2xl font-bold text-gray-800">${product.name}</h2>
+                    <button id="wishlist-btn-${product.id}" onclick="toggleWishlist(${product.id}, event)" class="text-gray-400 hover:text-red-500 p-2 -mr-2">
+                        <i class="far fa-heart text-2xl"></i>
+                    </button>
+                </div>
+                <p class="text-sm text-gray-500 mb-2">By <a href="#" onclick="navigateToCreatorProfilePage('${product.creator}', event)" class="text-blue-600 hover:underline">${product.creator}</a></p>
+                <div class="flex items-center mb-3 text-sm">
+                    <i class="fas fa-star text-yellow-400 mr-1"></i><span class="font-medium">${product.rating}</span>
+                    <span class="text-gray-400 mx-1.5">•</span> ${product.sales} sales
+                    <span class="text-gray-400 mx-1.5">•</span> <span class="text-green-600 bg-green-100 px-2 py-0.5 rounded-full text-xs">${product.category}</span>
+                </div>
+                <div class="mb-4"><span class="text-red-500 font-bold text-3xl">$${product.price.toFixed(2)}</span> ${product.originalPrice ? `<span class="text-gray-400 text-lg line-through ml-2">$${product.originalPrice.toFixed(2)}</span>` : ''}</div>
+                <div class="mb-6 border-t border-b border-gray-200 py-4"><h3 class="font-semibold text-gray-800 mb-2 text-lg">Description</h3><p class="text-gray-700 leading-relaxed text-sm">${product.description}</p></div>
+                <div class="mb-6"><h3 class="font-semibold text-gray-800 mb-2 text-lg">Asset Details</h3><ul class="list-none space-y-1 text-sm text-gray-600">${product.details.included.map(item => `<li><i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>${item}</li>`).join('')}<li><i class="fas fa-file-alt text-gray-500 mr-2 text-xs"></i>File Types: <span class="font-medium text-gray-700">${product.details.fileTypes}</span></li><li><i class="fas fa-save text-gray-500 mr-2 text-xs"></i>File Size: <span class="font-medium text-gray-700">${product.details.fileSize}</span></li><li><i class="fas fa-tools text-gray-500 mr-2 text-xs"></i>Compatible With: <span class="font-medium text-gray-700">${product.details.compatibility}</span></li><li><i class="fas fa-history text-gray-500 mr-2 text-xs"></i>Last Updated: <span class="font-medium text-gray-700">${product.details.lastUpdated}</span></li></ul></div>
+                <button onclick="addToCart(${product.id}, '${product.name}', ${product.price}, event)" class="w-full gradient-bg text-white py-3.5 rounded-xl font-semibold hover:opacity-90 flex items-center justify-center text-lg"><i class="fas fa-shopping-cart mr-2"></i> Add to Cart</button>
+            `;
+        }
+        
+        function changeMainProductImage(src, clickedThumbnail) {
+            document.getElementById('main-product-image').src = src;
+            document.querySelectorAll('.product-thumbnail').forEach(thumb => thumb.classList.remove('border-blue-500'));
+            clickedThumbnail.classList.add('border-blue-500');
+        }
+
+        function toggleWishlist(productId, event) {
+            if(event) event.stopPropagation();
+            const button = document.getElementById(`wishlist-btn-${productId}`);
+            const icon = button.querySelector('i');
+            if (icon.classList.contains('far')) {
+                icon.classList.remove('far'); icon.classList.add('fas', 'text-red-500'); showToast('Added to wishlist!');
+            } else {
+                icon.classList.remove('fas', 'text-red-500'); icon.classList.add('far'); showToast('Removed from wishlist.');
+            }
+        }
+
+        function loadBrowsePage(filterParam) {
+            const titleEl = document.getElementById('browse-page-title');
+            const filterInfoEl = document.getElementById('browse-filter-info');
+            const gridEl = document.getElementById('browse-grid');
+            gridEl.innerHTML = ''; 
+
+            let itemsToShow = Object.values(productsData);
+            let browseTitle = "Browse All Assets";
+            let filterText = "All Assets";
+
+            if (filterParam) {
+                if (filterParam === 'all_categories') { browseTitle = "All Categories"; filterText = "Showing All Categories"; }
+                else if (['graphics', 'music', 'videos', 'templates'].includes(filterParam.toLowerCase())) {
+                    const categoryProper = filterParam.charAt(0).toUpperCase() + filterParam.slice(1);
+                    itemsToShow = itemsToShow.filter(p => p.category.toLowerCase() === filterParam.toLowerCase());
+                    browseTitle = `Category: ${categoryProper}`; filterText = `Showing assets in ${categoryProper}`;
+                } else if (filterParam === 'all_creators') {
+                     browseTitle = "All Creators"; filterText = "Showing All Creators"; itemsToShow = []; 
+                     Object.values(creatorsData).forEach(creator => {
+                        gridEl.innerHTML += `<div class="bg-white border border-gray-100 rounded-xl p-4 flex flex-col items-center card-hover shadow-sm" onclick="navigateToCreatorProfilePage('${creator.username}', event)"><div class="w-20 h-20 rounded-full ${creator.username === '@designpro' ? 'creator-gradient' : 'bg-gray-200'} flex items-center justify-center mb-3 shadow-sm overflow-hidden"><img src="${creator.avatar}" alt="${creator.name}" class="w-full h-full object-cover" onerror="this.style.display='none'; this.parentElement.innerHTML = '<div class=\'image-placeholder-icon\'><i class=\'fas fa-user text-3xl ${creator.username === '@designpro' ? 'text-white' : 'text-gray-500'} opacity-90\'></i></div>';"></div><span class="font-semibold text-md">${creator.name}</span><span class="text-xs text-gray-500">${creator.username}</span><span class="text-xs text-gray-400 mt-1">${creator.products.length} products</span></div>`;
+                     });
+                } else if (filterParam === 'featured_products') {
+                    itemsToShow = Object.values(productsData).filter(p => p.id <= 2); 
+                    browseTitle = "Featured Products"; filterText = "Showing Featured Products";
+                } else { filterText = `Showing all assets (unknown filter: ${filterParam})`; }
+            }
+            
+            titleEl.textContent = browseTitle;
+            filterInfoEl.querySelector('span').textContent = filterText;
+
+            if (itemsToShow.length > 0) {
+                itemsToShow.forEach(product => {
+                    gridEl.innerHTML += `<div class="bg-white border border-gray-100 rounded-xl overflow-hidden card-hover shadow-sm product-card" data-product-id="${product.id}"><div class="h-36 bg-gray-100 flex items-center justify-center relative product-image-container"><img src="${product.images[0]}" alt="${product.name}" class="w-full h-full object-cover" onerror="this.style.display='none'; this.parentElement.innerHTML = '<div class=\'image-placeholder-icon\'><i class=\'fas fa-image text-3xl text-gray-400 opacity-70\'></i></div>';"></div><div class="p-3"><h4 class="font-medium text-sm mb-1 truncate">${product.name}</h4><div class="flex items-center justify-between"><div><span class="text-red-500 font-semibold text-sm">$${product.price.toFixed(2)}</span></div><button onclick="addToCart(${product.id}, '${product.name}', ${product.price}, event)" class="text-blue-500 hover:text-blue-700 p-1"><i class="fas fa-plus-circle text-lg"></i></button></div></div></div>`;
+                });
+            } else if (filterParam !== 'all_creators') {
+                 gridEl.innerHTML = '<p class="col-span-2 text-center text-gray-500 py-10">No assets found for this filter.</p>';
+            }
+        }
+        
+        function navigateToCreatorProfilePage(username, event) {
+            if (event) event.preventDefault();
+            navigateTo('creator-profile-page', null, username);
+        }
+
+        function loadCreatorProfilePage(username) {
+            const creator = creatorsData[username];
+            const contentArea = document.getElementById('creator-profile-content-area');
+            if (!creator) {
+                contentArea.innerHTML = `<p class="text-red-500 text-center py-10">Creator profile not found.</p>`; return;
+            }
+            let productsHtml = '<p class="text-sm text-gray-500 mt-2">This creator has no products yet.</p>';
+            if (creator.products && creator.products.length > 0) {
+                productsHtml = '<div class="grid grid-cols-2 gap-3">';
+                creator.products.forEach(productId => {
+                    const product = productsData[productId]; if (!product) return;
+                    productsHtml += `<div class="bg-white border border-gray-100 rounded-xl overflow-hidden card-hover shadow-sm product-card" data-product-id="${product.id}"><div class="h-28 bg-gray-100 flex items-center justify-center relative product-image-container"><img src="${product.images[0]}" alt="${product.name}" class="w-full h-full object-cover" onerror="this.style.display='none'; this.parentElement.innerHTML = '<div class=\'image-placeholder-icon\'><i class=\'fas fa-image text-2xl text-gray-400 opacity-70\'></i></div>';"></div><div class="p-2"><h5 class="font-medium text-xs mb-0.5 truncate">${product.name}</h5><span class="text-red-500 font-semibold text-xs">$${product.price.toFixed(2)}</span></div></div>`;
+                });
+                productsHtml += '</div>';
+            }
+            contentArea.innerHTML = `<div class="flex flex-col items-center mb-6 pt-4"><div class="w-24 h-24 rounded-full ${username === '@designpro' ? 'creator-gradient' : 'bg-gray-300'} flex items-center justify-center mb-3 shadow-lg overflow-hidden"><img src="${creator.avatar}" alt="${creator.name}" class="w-full h-full object-cover" onerror="this.style.display='none'; this.parentElement.innerHTML = '<div class=\'image-placeholder-icon\'><i class=\'fas fa-user text-4xl ${username === '@designpro' ? 'text-white' : 'text-gray-100'} opacity-90\'></i></div>';"></div><h2 class="text-3xl font-bold">${creator.name}</h2><p class="text-gray-600 text-md">${creator.username}</p><p class="text-sm text-gray-500 mt-1">Member since ${creator.memberSince} • ${creator.followers} followers</p><button class="mt-3 bg-blue-500 text-white px-6 py-2 rounded-full text-sm font-semibold hover:bg-blue-600 transition duration-300">Follow</button></div><div class="border-t border-b border-gray-200 py-4 mb-6"><h3 class="font-semibold text-gray-800 mb-2 text-lg">About ${creator.name}</h3><p class="text-gray-700 text-sm leading-relaxed">${creator.bio}</p></div><h3 class="text-xl font-semibold mb-4">Products by ${creator.name} (${creator.products.length})</h3>${productsHtml}`;
+        }
+
+        function openAuthModal(formType = 'login', intendedRole = 'user', triggerSource = null) {
+            currentAuthRole = intendedRole; 
+            if(loginRoleFlagInput) loginRoleFlagInput.value = intendedRole; 
+            if(registerRoleFlagInput) registerRoleFlagInput.value = intendedRole;
+
+            const registerCheckbox = document.getElementById('register-is-creator');
+
+            if (formType === 'login') {
+                if(authModalTitle) authModalTitle.textContent = (intendedRole === 'creator') ? 'Creator Log In' : 'Log In';
+                if (loginAsCreatorCtaContainer) {
+                    loginAsCreatorCtaContainer.style.display = (intendedRole === 'creator') ? 'none' : 'block';
+                }
+            } else { // register
+                 if(authModalTitle) authModalTitle.textContent = (intendedRole === 'creator') ? 'Sign Up as Creator' : 'Sign Up';
+                 if (registerAsCreatorCtaContainer) {
+                    registerAsCreatorCtaContainer.style.display = (intendedRole === 'creator') ? 'none' : 'block';
+                 }
+                 if (registerCheckbox) {
+                    registerCheckbox.checked = (intendedRole === 'creator');
+                 }
+            }
+            
+            switchAuthForm(formType); 
+            if(authModal) authModal.classList.add('active');
+        }
+        
+        function setLoginMode(role) {
+            currentAuthRole = role;
+            if(loginRoleFlagInput) loginRoleFlagInput.value = role;
+            if(authModalTitle) authModalTitle.textContent = (role === 'creator') ? 'Creator Log In' : 'Log In';
+            if(loginAsCreatorCtaContainer) loginAsCreatorCtaContainer.style.display = (role === 'creator') ? 'none' : 'block';
+        }
+
+        function setRegisterMode(role) {
+            currentAuthRole = role;
+            if(registerRoleFlagInput) registerRoleFlagInput.value = role; 
+            if(authModalTitle) authModalTitle.textContent = (role === 'creator') ? 'Sign Up as Creator' : 'Sign Up';
+            
+            const regCheckbox = document.getElementById('register-is-creator');
+            if (regCheckbox) { 
+                regCheckbox.checked = (role === 'creator');
+            }
+            if (registerAsCreatorCtaContainer) { 
+                registerAsCreatorCtaContainer.style.display = (role === 'creator') ? 'none' : 'block';
+            }
+        }
+
+        function closeAuthModal() {
+            if(authModal) authModal.classList.remove('active');
+            if(loginForm) loginForm.reset();
+            if(registerForm) registerForm.reset();
+            if(authModalTitle) authModalTitle.textContent = 'Log In'; 
+            if(loginAsCreatorCtaContainer) loginAsCreatorCtaContainer.style.display = 'block';
+            if(registerAsCreatorCtaContainer) registerAsCreatorCtaContainer.style.display = 'block';
+            currentAuthRole = 'user'; 
+            if(loginRoleFlagInput) loginRoleFlagInput.value = 'user';
+            if(registerRoleFlagInput) registerRoleFlagInput.value = 'user';
+        }
+
+        function switchAuthForm(formType) {
+            if (formType === 'login') {
+                if(loginFormContainer) loginFormContainer.classList.add('active');
+                if(registerFormContainer) registerFormContainer.classList.remove('active');
+                setLoginMode(currentAuthRole); 
+            } else { // register
+                if(loginFormContainer) loginFormContainer.classList.remove('active');
+                if(registerFormContainer) registerFormContainer.classList.add('active');
+                setRegisterMode(currentAuthRole); 
+            }
+        }
+        
+        if(loginForm) {
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = document.getElementById('login-email').value;
+                const roleToLogin = loginRoleFlagInput ? loginRoleFlagInput.value : 'user'; 
+                
+                currentUser = { name: email.split('@')[0].split('.')[0].replace(/^\w/, c => c.toUpperCase()), email: email, role: roleToLogin };
+                showToast(`${currentUser.role === 'creator' ? 'Creator' : ''} "${currentUser.name}" logged in successfully!`);
+                closeAuthModal();
+                navigateTo('profile-page'); 
+            });
+        }
+
+        if(registerForm) {
+            registerForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = document.getElementById('register-name').value;
+                const email = document.getElementById('register-email').value;
+                const tncCheckbox = document.getElementById('register-tnc');
+
+                if (tncCheckbox && !tncCheckbox.checked) {
+                    showToast("You must agree to the Terms and Conditions and Privacy Policy.");
+                    return;
+                }
+                const roleToRegister = registerRoleFlagInput ? registerRoleFlagInput.value : 'user'; 
+
+                currentUser = { name: name, email: email, role: roleToRegister };
+                showToast(`Account for "${name}" (${currentUser.role}) created! Now logged in.`);
+                closeAuthModal();
+                navigateTo('profile-page');
+            });
+        }
+        
+        function logoutUser() {
+            currentUser = null;
+            cartItems = []; 
+            updateCartBadgesDOM();
+            showToast("Logged out successfully.");
+            navigateTo('profile-page');
+        }
+
+        function navigateToCreatorAuth(triggerSource) { 
+            if (currentUser && currentUser.role === 'creator') {
+                navigateTo('upload-page'); 
+            } else {
+                 openAuthModal('register', 'creator', triggerSource); 
+            }
+        }
+        function navigateToUploadPageForCreator() { 
+             if (!currentUser) {
+                openAuthModal('login', 'user', 'FAB'); 
+            } else if (currentUser.role !== 'creator') {
+                showToast("Only Creators can upload assets. Please log in or sign up as a Creator.");
+                openAuthModal('login', 'creator', 'FAB'); 
+            }
+            else { 
+                navigateTo('upload-page');
+            }
+        }
+        
+        const uploadForm = document.getElementById('upload-asset-form');
+        if(uploadForm) {
+            uploadForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const titleInput = document.getElementById('asset-title');
+                if (titleInput) {
+                    const title = titleInput.value;
+                    showToast(`Asset "${title}" published! (Simulation)`);
+                } else {
+                    showToast(`Asset published! (Simulation)`);
+                }
+                navigateTo('profile-page'); 
+                this.reset();
+            });
+        }
+
+
+        function loadProfilePage() {
+            const profilePageDiv = document.getElementById('profile-page');
+            if (!profilePageDiv) return; // Element not found
+            if (currentUser) {
+                profilePageDiv.innerHTML = `
+                    <div class="flex items-center justify-between mb-6"><div></div><h2 class="text-xl font-bold text-center">My Account</h2><button onclick="logoutUser()" class="text-sm text-red-500 hover:text-red-700 font-medium">Sign Out</button></div>
+                    <div class="flex flex-col items-center mb-6"><div class="w-20 h-20 rounded-full gradient-bg flex items-center justify-center mb-3 text-white text-3xl font-semibold">${currentUser.name.charAt(0).toUpperCase()}</div><h3 class="font-bold text-lg">${currentUser.name}</h3><p class="text-gray-500 text-sm">${currentUser.email}</p><p class="text-xs ${currentUser.role === 'creator' ? 'text-purple-600 bg-purple-100' : 'text-green-600 bg-green-100'} px-2 py-0.5 rounded-full mt-2 capitalize font-medium">${currentUser.role}</p></div>
+                    <div class="space-y-3"><button onclick="navigateTo('downloads-page')" class="w-full bg-gray-50 hover:bg-gray-100 rounded-xl p-4 flex items-center justify-between text-left transition-colors"><div class="flex items-center"><div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3"><i class="fas fa-download text-blue-500"></i></div><span class="font-medium">Downloads</span></div><i class="fas fa-chevron-right text-gray-400"></i></button><button onclick="navigateTo('purchase-history-page')" class="w-full bg-gray-50 hover:bg-gray-100 rounded-xl p-4 flex items-center justify-between text-left transition-colors"><div class="flex items-center"><div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mr-3"><i class="fas fa-receipt text-purple-500"></i></div><span class="font-medium">Purchase History</span></div><i class="fas fa-chevron-right text-gray-400"></i></button>${currentUser.role === 'creator' ? `<button onclick="navigateTo('my-uploads-page')" class="w-full bg-gray-50 hover:bg-gray-100 rounded-xl p-4 flex items-center justify-between text-left transition-colors"><div class="flex items-center"><div class="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center mr-3"><i class="fas fa-upload text-yellow-600"></i></div><span class="font-medium">My Uploads</span></div><i class="fas fa-chevron-right text-gray-400"></i></button>` : ''}<button onclick="navigateTo('settings-page')" class="w-full bg-gray-50 hover:bg-gray-100 rounded-xl p-4 flex items-center justify-between text-left transition-colors"><div class="flex items-center"><div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center mr-3"><i class="fas fa-cog text-red-500"></i></div><span class="font-medium">Settings</span></div><i class="fas fa-chevron-right text-gray-400"></i></button></div>`;
+            } else {
+                profilePageDiv.innerHTML = `
+                    <h2 class="text-xl font-bold mb-6 text-center">My Account</h2><div class="flex flex-col items-center mb-6"><div class="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center mb-3"><i class="fas fa-user text-gray-400 text-3xl"></i></div><h3 class="font-bold text-lg">Guest User</h3><p class="text-gray-500 text-sm">Log in to access your account.</p></div><div class="bg-yellow-50 border border-yellow-200 text-yellow-800 rounded-lg p-4 mb-6 text-sm">You are not logged in. Please log in or sign up to access all features.</div>
+                    <div class="space-y-3"><button onclick="openAuthModal('login', 'user')" class="w-full gradient-bg text-white py-3 rounded-xl font-semibold hover:opacity-90">Log In</button><button onclick="openAuthModal('register', 'user')" class="w-full border border-gray-300 text-gray-700 py-3 rounded-xl font-semibold hover:bg-gray-50">Sign Up</button></div>
+                    <p class="mt-6 text-center text-sm">Are you a Creator? <span onclick="openAuthModal('login', 'creator')" class="font-medium text-purple-600 hover:text-purple-500 cursor-pointer">Log In</span> / <span onclick="openAuthModal('register', 'creator')" class="font-medium text-purple-600 hover:text-purple-500 cursor-pointer">Sign Up as Creator</span></p>`;
+            }
+        }
+
+        function updateCartBadgesDOM() {
+            const totalCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+            if(cartBadgeHeader) cartBadgeHeader.textContent = totalCount; 
+            if(cartBadgeNav) cartBadgeNav.textContent = totalCount;
+        }
+
+        function addToCart(productId, productName, productPrice, event) {
+            if(event) event.stopPropagation(); 
+            const existingItemIndex = cartItems.findIndex(item => item.id === productId);
+            if (existingItemIndex > -1) { cartItems[existingItemIndex].quantity++; } 
+            else { cartItems.push({ id: productId, name: productName, price: productPrice, quantity: 1 }); }
+            updateCartBadgesDOM(); showToast(`${productName} added to cart!`);
+            const cartPageEl = document.getElementById('cart-page');
+            if (cartPageEl && cartPageEl.classList.contains('active')) { loadCartPage(); }
+        }
+        
+        function updateCartItemQuantity(productId, change) {
+            const itemIndex = cartItems.findIndex(item => item.id === productId);
+            if (itemIndex > -1) { cartItems[itemIndex].quantity += change; if (cartItems[itemIndex].quantity <= 0) { cartItems.splice(itemIndex, 1); } }
+            loadCartPage(); updateCartBadgesDOM();
+        }
+
+        function loadCartPage() {
+            const container = document.getElementById('cart-items-container');
+            const summaryDiv = document.getElementById('cart-summary');
+            const checkoutBtn = document.getElementById('checkout-button');
+            if(!container || !summaryDiv || !checkoutBtn) return;
+
+            container.innerHTML = ''; 
+            if (cartItems.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 text-center py-10">Your cart is empty.</p>';
+                summaryDiv.classList.add('hidden'); checkoutBtn.classList.add('hidden'); return;
+            }
+            let subtotal = 0;
+            cartItems.forEach(item => {
+                const product = productsData[item.id]; 
+                const itemTotal = item.price * item.quantity; subtotal += itemTotal;
+                container.innerHTML += `<div class="bg-white border border-gray-100 rounded-xl p-3 flex items-center shadow-sm"><div class="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center mr-4 overflow-hidden"><img src="${product ? product.images[0] : 'https://placehold.co/80x80/cccccc/999999?text=N/A'}" alt="${item.name}" class="w-full h-full object-cover" onerror="this.style.display='none'; this.parentElement.innerHTML = '<div class=\'image-placeholder-icon\'><i class=\'fas fa-image text-xl text-gray-400\'></i></div>';"></div><div class="flex-1"><h4 class="font-medium text-sm mb-1">${item.name}</h4><span class="text-red-500 font-semibold text-sm">$${item.price.toFixed(2)}</span></div><div class="flex items-center space-x-2"><button onclick="updateCartItemQuantity(${item.id}, -1)" class="w-7 h-7 bg-gray-200 text-gray-700 rounded-full flex items-center justify-center hover:bg-gray-300 transition-colors">-</button><span class="text-sm font-medium w-5 text-center">${item.quantity}</span><button onclick="updateCartItemQuantity(${item.id}, 1)" class="w-7 h-7 bg-gray-200 text-gray-700 rounded-full flex items-center justify-center hover:bg-gray-300 transition-colors">+</button></div></div>`;
+            });
+            const cartSubtotalEl = document.getElementById('cart-subtotal');
+            const cartTotalEl = document.getElementById('cart-total');
+            if(cartSubtotalEl) cartSubtotalEl.textContent = `$${subtotal.toFixed(2)}`;
+            if(cartTotalEl) cartTotalEl.textContent = `$${subtotal.toFixed(2)}`; 
+            summaryDiv.classList.remove('hidden'); checkoutBtn.classList.remove('hidden');
+        }
+        
+        function navigateToCheckout() {
+            if (cartItems.length === 0) { showToast("Your cart is empty. Add items to proceed."); return; }
+            if (!currentUser) { showToast("Please log in to proceed to checkout."); openAuthModal('login', 'user', 'checkout'); return; }
+            navigateTo('checkout-page');
+        }
+
+        function loadCheckoutPage() {
+            const itemsListDiv = document.getElementById('checkout-items-list');
+            const totalSpan = document.getElementById('checkout-total');
+            if(!itemsListDiv || !totalSpan) return;
+            itemsListDiv.innerHTML = ''; let total = 0;
+            if (cartItems.length === 0) { 
+                itemsListDiv.innerHTML = '<p class="text-sm text-gray-500">No items to checkout.</p>'; totalSpan.textContent = '$0.00'; return;
+            }
+            cartItems.forEach(item => {
+                total += item.price * item.quantity;
+                itemsListDiv.innerHTML += `<div class="flex justify-between items-center text-sm"><span class="text-gray-700">${item.name} (x${item.quantity})</span><span class="text-gray-800 font-medium">$${(item.price * item.quantity).toFixed(2)}</span></div>`;
+            });
+            totalSpan.textContent = `$${total.toFixed(2)}`;
+        }
+
+        function processPayment() {
+            showToast("Payment Successful! Thank you for your order.");
+            cartItems = []; updateCartBadgesDOM(); navigateTo('home-page');
+        }
+
+        function showToast(message) {
+            if(!toastNotification) return;
+            toastNotification.textContent = message;
+            toastNotification.classList.remove('opacity-0'); toastNotification.classList.add('opacity-100');
+            setTimeout(() => { toastNotification.classList.remove('opacity-100'); toastNotification.classList.add('opacity-0'); }, 2800);
+        }
+
+        function startCountdown() {
+            let countdown = 86399; 
+            const countdownElement = document.getElementById('countdown-display');
+            if (!countdownElement) return;
+            const timerInterval = setInterval(function() {
+                if (countdown <= 0) { clearInterval(timerInterval); countdownElement.textContent = "Expired!"; return; }
+                const h = Math.floor(countdown/3600), m = Math.floor((countdown%3600)/60), s = countdown%60;
+                countdownElement.textContent = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+                countdown--;
+            }, 1000);
+        }
+        
+        function setupEventListeners() {
+            tabButtons.forEach(button => button.addEventListener('click', function(e) { e.preventDefault(); navigateTo(this.dataset.page); }));
+            if(appContent) {
+                appContent.addEventListener('click', function(event) {
+                    const productCard = event.target.closest('.product-card');
+                    if (productCard && !event.target.closest('button')) { 
+                        const productId = productCard.dataset.productId; if (productId) navigateTo('product-detail-page', null, productId);
+                    }
+                });
+            }
+            if(authModal) {
+                authModal.addEventListener('click', function(event) { if (event.target === authModal) closeAuthModal(); });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            startCountdown(); setupEventListeners(); navigateTo('home-page'); loadProfilePage(); updateCartBadgesDOM(); 
+        });
+
+    </script>
+</body>
+</html>
